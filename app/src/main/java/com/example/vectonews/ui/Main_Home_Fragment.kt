@@ -112,7 +112,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
       //  binding.preItemToolbar.setBackgroundColor(resources.getColor(R.color.black_shade_2))
 
 
-        val newStatusBarColor = Color.parseColor("#E2E6DE")
+        val newStatusBarColor = Color.parseColor("#FFFFFF")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.window?.statusBarColor = newStatusBarColor
         }
