@@ -33,7 +33,7 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
 
 
 
-        changeToolabrColor()
+     //   changeToolabrColor()
 
         binding.btnDeleteall.setOnClickListener {
             hideKeyBaord()
@@ -120,9 +120,9 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
     @SuppressLint("ObsoleteSdkInt")
     private fun changeToolabrColor() {
 
-        binding.constraintLayout.setBackgroundColor(resources.getColor(R.color.black_shade_1))
+      //  binding.constraintLayout.setBackgroundColor(resources.getColor(R.color.deem_shade))
 
-        val newStatusBarColor = Color.parseColor("#0e2433")
+        val newStatusBarColor = Color.parseColor("#E2E6DE")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.window?.statusBarColor = newStatusBarColor

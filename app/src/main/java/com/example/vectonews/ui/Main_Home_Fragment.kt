@@ -31,18 +31,23 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.vectonews.MainActivity
 import com.example.vectonews.R
+import com.example.vectonews.databinding.FragmentMainHomeBinding
+import com.example.vectonews.databinding.FragmentMainSaveBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     private lateinit var navController: NavController
-
     private val navigationBroadcastReceiver = NavigationBroadcastReceiver()
+
+    private var _binding: FragmentMainHomeBinding? = null
+    private val binding get() = _binding!!
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentMainHomeBinding.bind(view)
 
         val filter = IntentFilter("Main_Home_Fragment")
         requireContext().registerReceiver(navigationBroadcastReceiver, filter)
@@ -55,23 +60,23 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottomChildNavigationView)
         bottomNavigationView.setupWithNavController(navController)
 
-        // Set up the hamburger icon click listener
-        val hamburgerIcon = view.findViewById<ImageView>(R.id.backArrowPre)
-        hamburgerIcon.setOnClickListener {
 
-            val intent = Intent("MainActivity")
-            view.context.sendBroadcast(intent)
+        binding.apply {
+            hamburger.setOnClickListener {
+
+                val intent = Intent("MainActivity")
+                view.context.sendBroadcast(intent)
+
+            }
+
+            textsearch.setOnClickListener {
+                findNavController().navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
+            }
 
         }
 
 
-        val textview = view.findViewById<TextView>(R.id.titleText)
-
-        textview.setOnClickListener {
-            findNavController().navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
-        }
-
-        changeToolbarColor(view)
+        changeToolbarColor()
 
     }
 
@@ -102,13 +107,12 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
 
     @SuppressLint("ObsoleteSdkInt")
-    private fun changeToolbarColor(view: View) {
+    private fun changeToolbarColor() {
 
-        val myToolbar:ConstraintLayout  = view.findViewById(R.id.myToolbar)
-        myToolbar.setBackgroundColor(resources.getColor(R.color.black_shade_2))
+      //  binding.preItemToolbar.setBackgroundColor(resources.getColor(R.color.black_shade_2))
 
 
-        val newStatusBarColor = Color.parseColor("#1C4966")
+        val newStatusBarColor = Color.parseColor("#E2E6DE")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.window?.statusBarColor = newStatusBarColor
         }

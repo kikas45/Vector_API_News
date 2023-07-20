@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/black_shade_1"
+        android:layout_height="58dp"
+        android:background="#E2E6DE"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -28,12 +28,11 @@
             android:inputType="text"
             android:maxHeight="30dp"
             android:maxLines="1"
-            android:paddingStart="26dp"
             android:paddingTop="6dp"
             android:paddingEnd="26dp"
             android:paddingBottom="6dp"
             android:textColor="@color/white"
-            android:textColorHint="#697023"
+            android:textColorHint="#5A5A54"
             android:textSize="16sp"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,39 +46,39 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
-            android:foreground="?android:selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?android:selectableItemBackgroundBorderless"
             android:padding="4dp"
             android:src="@drawable/ic_delete_downloads"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/btnBackPressed"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:foreground="?android:selectableItemBackgroundBorderless"
+            android:layout_marginStart="16dp"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?android:selectableItemBackgroundBorderless"
             android:padding="6dp"
             android:src="@drawable/ic_baseline_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/editClear"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="6dp"
-            android:foreground="?android:selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?android:selectableItemBackgroundBorderless"
             android:padding="5dp"
             android:src="@drawable/ic_close_for_bs"
             android:visibility="invisible"
