@@ -35,7 +35,7 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
 
         changeToolabrColor()
 
-        binding.btnDeleteall.setOnClickListener {
+        binding.textDeleteall.setOnClickListener {
             hideKeyBaord()
 
         }

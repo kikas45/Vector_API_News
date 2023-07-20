@@ -20,10 +20,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             android:background="@android:color/transparent"
             android:ellipsize="end"
-            android:hint="Search data"
+            android:hint="Search Vector News Space"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxHeight="30dp"
@@ -36,34 +37,21 @@
             android:textSize="16sp"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnDeleteall"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnBackPressed"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
-            android:id="@+id/btnDeleteall"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            android:src="@drawable/ic_delete_downloads"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
-
-        <ImageView
             android:id="@+id/btnBackPressed"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:selectableItemBackgroundBorderless"
+
             android:padding="6dp"
             android:src="@drawable/ic_baseline_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,8 +61,8 @@
 
         <ImageView
             android:id="@+id/editClear"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="6dp"
             android:clickable="true"
             android:focusable="true"
@@ -95,11 +83,40 @@
         android:id="@+id/recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:reverseLayout="true"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:reverseLayout="true" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Recent searches"
+        android:textSize="13sp"
+        android:maxLines="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/textDeleteall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Delete all"
+        android:textColor="@color/black_shade_2"
+        android:textSize="13sp"
+        android:padding="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:maxLines="1"
+        android:foreground="?android:selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
