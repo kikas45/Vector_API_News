@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main_home"
+    app:startDestination="@id/main_Home_Fragment">
+    <fragment
+        android:id="@+id/main_Home_Fragment"
+        android:name="com.example.vectonews.ui.Main_Home_Fragment"
+        android:label="fragment_main_home"
+        tools:layout="@layout/fragment_main_home" >
+        <action
+            android:id="@+id/action_main_Home_Fragment_to_main_Save_Fragment"
+            app:destination="@id/main_Save_Fragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/main_Save_Fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/main_Save_Fragment"
+        android:name="com.example.vectonews.ui.Main_Save_Fragment"
+        android:label="fragment_main_save"
+        tools:layout="@layout/fragment_main_save" >
+        <action
+            android:id="@+id/action_main_Save_Fragment_to_main_Home_Fragment"
+            app:destination="@id/main_Home_Fragment"
+            app:popUpTo="@id/nav_main_home"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
