@@ -31,7 +31,7 @@
             android:paddingTop="6dp"
             android:paddingEnd="26dp"
             android:paddingBottom="6dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textColorHint="#5A5A54"
             android:textSize="16sp"
             app:endIconMode="clear_text"
@@ -45,7 +45,7 @@
             android:id="@+id/btnDeleteall"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="20dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:selectableItemBackgroundBorderless"
@@ -60,7 +60,7 @@
             android:id="@+id/btnBackPressed"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:selectableItemBackgroundBorderless"
@@ -85,7 +85,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/editText"
             app:layout_constraintEnd_toEndOf="@+id/editText"
             app:layout_constraintTop_toTopOf="@+id/editText"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
