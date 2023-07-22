@@ -38,9 +38,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:text="Settings"
+            android:maxLines="1"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/close_bs"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/close_bs"
             app:layout_constraintTop_toTopOf="@+id/close_bs" />
 
@@ -66,9 +69,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/action_bar_root">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layoutDescription="@xml/fragment_setting_theme_xml_constraintlayout3_scene">
 
             <TextView
                 android:id="@+id/textView2"
@@ -84,14 +89,16 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/rg_theme"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/rg_theme"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="5dp"
                 android:layout_marginEnd="24dp"
+                android:alpha="1"
                 app:layout_constraintBottom_toBottomOf="@+id/textView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView2" />
@@ -114,28 +121,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView74" />
 
             <TextView
-                android:id="@+id/textView70"
-                style="@style/Base.Theme.VectoNews"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="24dp"
-                android:elegantTextHeight="true"
-                android:maxLines="1"
-                android:text="Video quality"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/switch2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView64" />
-
-            <TextView
                 android:id="@+id/textView64"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="24dp"
+                android:alpha="0"
                 android:elegantTextHeight="true"
                 android:maxLines="1"
                 android:text="Be updated with latest information"
@@ -147,52 +139,32 @@
             <TextView
                 android:id="@+id/textView74"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="24dp"
+                android:alpha="0"
                 android:elegantTextHeight="true"
                 android:maxLines="1"
                 android:text="Note: app will recreated when changing team "
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/rg_theme"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-            <TextView
-                android:id="@+id/textView73"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="24dp"
-                android:elegantTextHeight="true"
-                android:maxLines="1"
-                android:text="Increase video quality"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/switch2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView70" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:ignore="HardcodedText" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="5dp"
                 android:layout_marginEnd="24dp"
+                android:alpha="1"
                 app:layout_constraintBottom_toBottomOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView73"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView70" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
     </androidx.core.widget.NestedScrollView>
 
 

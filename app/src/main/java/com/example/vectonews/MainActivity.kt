@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -29,8 +32,14 @@ class MainActivity : AppCompatActivity() {
         AppSettings(applicationContext)
     }
 
+    private val  handler: Handler by lazy {
+        Handler(Looper.getMainLooper())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
+        Thread.sleep(2000)  /// remember to remove this after production
         applyTheme(settings.getTheme())
         setContentView(R.layout.activity_main)
         setTheme(R.style.Base_Theme_VectoNews)
@@ -68,12 +77,16 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
+
         settings.setOnClickListener {
 
             drawerLayout.closeDrawer(GravityCompat.START)
-            if (navController.currentDestination?.id != R.id.savedFragment) {
-                navController.navigate(R.id.action_main_Home_Fragment_to_setting_theme_Fragment)
-            }
+
+            handler.postDelayed( Runnable {
+                if (navController.currentDestination?.id != R.id.savedFragment) {
+                    navController.navigate(R.id.action_main_Home_Fragment_to_setting_theme_Fragment)
+                }
+            }, 300)
         }
 
 
@@ -116,6 +129,14 @@ class MainActivity : AppCompatActivity() {
             else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            handler.removeCallbacksAndMessages(null)
+        }catch (_:Exception){}
+    }
+
 
 
 }
