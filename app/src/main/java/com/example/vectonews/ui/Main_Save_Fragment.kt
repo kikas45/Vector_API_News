@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.vectonews.R
 import com.example.vectonews.databinding.FragmentMainSaveBinding
+import com.example.vectonews.settings.AppSettings
 
 
 class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
@@ -25,6 +25,11 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
 
     private var _binding: FragmentMainSaveBinding? = null
     private val binding get() = _binding!!
+
+    private val settings: AppSettings by lazy {
+        AppSettings(requireContext().applicationContext)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,13 +125,15 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
     @SuppressLint("ObsoleteSdkInt")
     private fun changeToolabrColor() {
 
-      //  binding.constraintLayout.setBackgroundColor(resources.getColor(R.color.deem_shade))
 
-        val newStatusBarColor = Color.parseColor("#E2E6DE")
+        if (settings.getTheme() == AppSettings.THEME_LIGHT){
+            activity?.window?.statusBarColor = Color.parseColor("#E8EDFA")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.window?.statusBarColor = newStatusBarColor
+        }else{
+            activity?.window?.statusBarColor = Color.parseColor("#2E2E2E")
+
         }
+
 
     }
 }

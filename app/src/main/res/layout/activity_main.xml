@@ -24,12 +24,16 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
+        style="@style/bottomNavBar"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        app:menu="@menu/drawer_menu">
+        android:layout_gravity="start">
 
+       <!-- pls manually inflate the header
+            app:menu="@menu/drawer_menu"
+        app:headerLayout="@layout/drawer_header"-->
 
     </com.google.android.material.navigation.NavigationView>
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

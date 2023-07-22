@@ -4,20 +4,18 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.fragment.NavHostFragment
+import com.example.vectonews.settings.AppSettings
 import com.google.android.material.navigation.NavigationView
 import java.lang.ref.WeakReference
 
@@ -25,11 +23,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var receiver: MyBroadcastReceiver
 
+    private lateinit var navController: NavController
+
+    private val settings: AppSettings by lazy {
+        AppSettings(applicationContext)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyTheme(settings.getTheme())
         setContentView(R.layout.activity_main)
+        setTheme(R.style.Base_Theme_VectoNews)
         supportActionBar?.hide()
+
+        //note theme settings must be called before the setContentView and onCreate
 
 
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -38,38 +45,38 @@ class MainActivity : AppCompatActivity() {
         receiver = MyBroadcastReceiver(drawerLayoutRef)
 
 
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
+
 
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_item1 -> {
 
-                    Toast.makeText(applicationContext, "Yes ", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
+        // inflate the drawer head
+        val header = navigationView.inflateHeaderView(R.layout.drawer_header)
+        val imageViewer = header.findViewById<ImageView>(R.id.imageViewer)
+        val settings = header.findViewById<TextView>(R.id.settings)
+        val textProfile = header.findViewById<TextView>(R.id.textProfile)
 
-                    //   if (navController.currentDestination?.id != R.id.savedFragment) {
-                    //  navController.navigate(R.id.action_homeFragment_to_savedFragment)
-                    //   }
+        imageViewer.setOnClickListener {
+            Toast.makeText(applicationContext, "Yes Header", Toast.LENGTH_SHORT).show()
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
 
-                    true
-                }
+        textProfile.setOnClickListener {
+            Toast.makeText(applicationContext, "Yes Header", Toast.LENGTH_SHORT).show()
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
 
-                R.id.nav_item2 -> {
-                    // Handle item 2 click
-                    Toast.makeText(applicationContext, "Yes ", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
+        settings.setOnClickListener {
 
-                R.id.nav_item3 -> {
-                    Toast.makeText(applicationContext, "Yes ", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-
-                else -> false
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (navController.currentDestination?.id != R.id.savedFragment) {
+                navController.navigate(R.id.action_main_Home_Fragment_to_setting_theme_Fragment)
             }
         }
+
+
 
 
     }
@@ -83,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    class MyBroadcastReceiver(private val drawerLayoutRef: WeakReference<DrawerLayout>) :
+    private class MyBroadcastReceiver(private val drawerLayoutRef: WeakReference<DrawerLayout>) :
         BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             drawerLayoutRef.get()?.openDrawer(GravityCompat.START)
@@ -102,5 +109,13 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         unregisterReceiver(receiver)
     }
+
+    private fun applyTheme(theme: Int) {
+        when (theme) {
+            AppSettings.THEME_DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
 
 }

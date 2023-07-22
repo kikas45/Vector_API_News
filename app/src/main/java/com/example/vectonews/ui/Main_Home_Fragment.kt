@@ -6,33 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.registerReceiver
-import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.example.vectonews.MainActivity
 import com.example.vectonews.R
 import com.example.vectonews.databinding.FragmentMainHomeBinding
-import com.example.vectonews.databinding.FragmentMainSaveBinding
+import com.example.vectonews.settings.AppSettings
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -42,6 +27,10 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
     private var _binding: FragmentMainHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val settings: AppSettings by lazy {
+        AppSettings(requireContext().applicationContext)
+    }
 
 
 
@@ -102,19 +91,21 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     override fun onDestroy() {
         super.onDestroy()
 
-        requireContext().unregisterReceiver(navigationBroadcastReceiver)
+        try {
+            requireContext().unregisterReceiver(navigationBroadcastReceiver)
+        }catch (io:Exception){}
     }
 
 
     @SuppressLint("ObsoleteSdkInt")
     private fun changeToolbarColor() {
 
-      //  binding.preItemToolbar.setBackgroundColor(resources.getColor(R.color.black_shade_2))
+        if (settings.getTheme() == AppSettings.THEME_LIGHT){
+            activity?.window?.statusBarColor = Color.parseColor("#FFFFFF")
 
+        }else{
+            activity?.window?.statusBarColor = Color.parseColor("#1E1D1D")
 
-        val newStatusBarColor = Color.parseColor("#FFFFFF")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.window?.statusBarColor = newStatusBarColor
         }
 
     }

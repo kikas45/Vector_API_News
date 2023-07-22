@@ -1,16 +1,56 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.VectoNews"   parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+    <style name="Base.Theme.VectoNews" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryVariant">#039BE5</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">#039BE5</item>  <!--this affect prpgressbar-->
+
+        <item name="colorSecondaryVariant">#039BE5</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black_shade_1</item>
+        <item name="android:statusBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
+
+
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+
+        <item name="android:navigationBarColor">@color/dark_bottom_nav</item>
+
+
+        <!--  This is used for to change the vector images color -->
+        <item name="colorControlNormal">#FFFFFF</item>
+
+
+
+
     </style>
+    <!--        This would style the search bar on the main home Fragment -->
+    <style name="searchBarRound">
+        <item name="android:background">@drawable/round_search_corners_dark</item>
+    </style>
+
+
+    <!--   this work for switching background colors and use in Main save Fragment constrain -->
+    <style name="simpleGrayColor">
+        <item name="android:background">@color/black_shade_1</item>
+    </style>
+
+    <!--   this work for switching background for all parent layouts  -->
+    <style name="allParentsLayouts">
+        <item name="android:background">@color/black_gray_1</item>
+    </style>
+
+
+    <!--   this works for the bottom navigation background   -->
+    <style name="bottomNavBar">
+        <item name="android:background">@color/dark_bottom_nav</item>
+    </style>
+
+
 </resources>

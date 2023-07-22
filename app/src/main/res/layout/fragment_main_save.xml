@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainBase"
+    style="@style/allParentsLayouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.Main_Save_Fragment">
@@ -11,7 +12,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#E2E6DE"
+        style="@style/simpleGrayColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -32,14 +33,14 @@
             android:paddingTop="6dp"
             android:paddingEnd="26dp"
             android:paddingBottom="6dp"
-            android:textColor="@color/black"
-            android:textColorHint="#5A5A54"
+            style="@style/Base.Theme.VectoNews"
             android:textSize="16sp"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnBackPressed"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,RtlSymmetry" />
 
 
         <ImageView
@@ -51,13 +52,11 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:selectableItemBackgroundBorderless"
-
             android:padding="6dp"
             android:src="@drawable/ic_baseline_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/editClear"
@@ -72,8 +71,7 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/editText"
             app:layout_constraintEnd_toEndOf="@+id/editText"
-            app:layout_constraintTop_toTopOf="@+id/editText"
-            app:tint="@color/black" />
+            app:layout_constraintTop_toTopOf="@+id/editText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -97,6 +95,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="Recent searches"
+        style="@style/Base.Theme.VectoNews"
         android:textSize="13sp"
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,6 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="Delete all"
+        style="@style/Base.Theme.VectoNews"
         android:textColor="@color/black_shade_2"
         android:textSize="13sp"
         android:padding="4dp"
@@ -117,6 +117,7 @@
         android:foreground="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/textView2"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
