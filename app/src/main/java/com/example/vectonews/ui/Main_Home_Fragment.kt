@@ -19,8 +19,9 @@ import com.example.vectonews.R
 import com.example.vectonews.databinding.FragmentMainHomeBinding
 import com.example.vectonews.settings.AppSettings
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     private lateinit var navController: NavController
     private val navigationBroadcastReceiver = NavigationBroadcastReceiver()
@@ -49,20 +50,6 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottomChildNavigationView)
         bottomNavigationView.setupWithNavController(navController)
 
-
-        binding.apply {
-            hamburger.setOnClickListener {
-
-                val intent = Intent("MainActivity")
-                view.context.sendBroadcast(intent)
-
-            }
-
-            textsearch.setOnClickListener {
-                findNavController().navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
-            }
-
-        }
 
 
         changeToolbarColor()

@@ -8,90 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.Main_Home_Fragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/pre_item_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <TextView
-            android:id="@+id/editText"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            style="@style/searchBarRound"
-            android:clickable="true"
-            android:ellipsize="end"
-            android:foreground="?android:selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:maxLines="1"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ImageView
-            android:id="@+id/hamburger"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:selectableItemBackgroundBorderless"
-            android:padding="13dp"
-            android:src="@drawable/ic_hamburger"
-            android:tint="?attr/colorControlNormal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/editText"
-            app:layout_constraintStart_toStartOf="@+id/editText"
-            app:layout_constraintTop_toTopOf="@+id/editText"
-            tools:ignore="UseAppTint" />
-
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/editClear"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:selectableItemBackgroundBorderless"
-            android:padding="10dp"
-            android:src="@drawable/ic_launcher_background"
-            android:visibility="visible"
-            app:civ_border_color="#3C3737"
-            app:civ_border_width="0.3dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText"
-            app:layout_constraintEnd_toEndOf="@+id/editText"
-            app:layout_constraintTop_toTopOf="@+id/editText" />
-
-        <TextView
-            android:id="@+id/textsearch"
-            style="@style/Base.Theme.VectoNews"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:focusable="false"
-            android:fontFamily="sans-serif"
-            android:gravity="center|start"
-            android:paddingStart="8dp"
-            android:text="Search Vector News"
-            android:textSize="16sp"
-            android:maxLines="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editClear"
-            app:layout_constraintStart_toEndOf="@+id/hamburger"
-            app:layout_constraintTop_toTopOf="@+id/editText"
-            tools:ignore="HardcodedText,RtlSymmetry" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentChildContainer"
@@ -102,7 +18,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomChildNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pre_item_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/my_nav_sub_home" />
 
 

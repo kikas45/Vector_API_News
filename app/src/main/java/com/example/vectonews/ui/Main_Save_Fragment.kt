@@ -18,8 +18,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.vectonews.R
 import com.example.vectonews.databinding.FragmentMainSaveBinding
 import com.example.vectonews.settings.AppSettings
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
 
 
@@ -44,6 +45,12 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save) {
             hideKeyBaord()
 
         }
+
+
+
+
+
+
 
         binding.apply {
 

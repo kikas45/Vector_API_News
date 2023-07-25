@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.vectonews.ui.sub_main.HomeFragment"
+        android:name="com.example.vectonews.ui.sub_main.GalleryFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_gallery" />
     <fragment
         android:id="@+id/savedFragment"
         android:name="com.example.vectonews.ui.sub_main.SavedFragment"

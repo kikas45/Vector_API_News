@@ -20,8 +20,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.vectonews.settings.AppSettings
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var receiver: MyBroadcastReceiver
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
-        Thread.sleep(2000)  /// remember to remove this after production
+     //   Thread.sleep(2000)  /// remember to remove this after production
         applyTheme(settings.getTheme())
         setContentView(R.layout.activity_main)
         setTheme(R.style.Base_Theme_VectoNews)

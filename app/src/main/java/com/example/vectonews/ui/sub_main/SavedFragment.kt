@@ -17,7 +17,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved) {
 
 
         textview.setOnClickListener {
-            val intent = Intent("com.example.vectonews.ACTION_NAVIGATE_TO_SAVE_FRAGMENT")
+            val intent = Intent("Main_Home_Fragment")
             requireContext().sendBroadcast(intent)
 
         }
