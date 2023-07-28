@@ -24,7 +24,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     private lateinit var navController: NavController
-    private val navigationBroadcastReceiver = NavigationBroadcastReceiver()
+
+    private val navigationBroadcastReceiver:NavigationBroadcastReceiver by lazy {
+        NavigationBroadcastReceiver()
+    }
 
     private var _binding: FragmentMainHomeBinding? = null
     private val binding get() = _binding!!
@@ -80,7 +83,9 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
         try {
             requireContext().unregisterReceiver(navigationBroadcastReceiver)
-        }catch (io:Exception){}
+            _binding = null
+        }catch (_:Exception){}
+
     }
 
 
@@ -96,5 +101,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         }
 
     }
+
+
 
 }

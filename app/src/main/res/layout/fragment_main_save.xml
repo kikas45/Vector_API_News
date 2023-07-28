@@ -67,6 +67,7 @@
             android:focusable="true"
             android:foreground="?android:selectableItemBackgroundBorderless"
             android:padding="5dp"
+            tools:visibility="visible"
             android:src="@drawable/ic_close_for_bs"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/editText"
@@ -97,6 +98,7 @@
         android:text="Recent searches"
         style="@style/Base.Theme.VectoNews"
         android:textSize="13sp"
+        tools:visibility="visible"
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -114,6 +116,7 @@
         android:clickable="true"
         android:focusable="true"
         android:maxLines="1"
+        tools:visibility="visible"
         android:foreground="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"

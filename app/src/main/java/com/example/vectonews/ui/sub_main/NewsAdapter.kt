@@ -11,8 +11,8 @@ import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.ItemUnsplashPhotoBinding
 
 
-class ProductsAdapter(private val listener: OnItemClickListenerMe) :
-    PagingDataAdapter<UnsplashPhoto, ProductsAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
+class NewsAdapter(private val listener: OnItemClickListenerMe) :
+    PagingDataAdapter<UnsplashPhoto, NewsAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val binding =

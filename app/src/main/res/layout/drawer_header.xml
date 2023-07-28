@@ -25,13 +25,13 @@
 
     <TextView
         android:id="@+id/textView6"
+        style="@style/Base.Theme.VectoNews"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Vector News"
-        style="@style/Base.Theme.VectoNews"
         android:textSize="23sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textProfile"
+        android:id="@+id/textHeadLinesUs"
         style="@style/Base.Theme.VectoNews"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         android:foreground="?android:selectableItemBackgroundBorderless"
         android:maxLines="1"
         android:padding="5dp"
-        android:text="Profile"
+        android:text="Get Headlines from US"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,5 +92,25 @@
         tools:ignore="HardcodedText" />
 
 
+    <TextView
+        android:id="@+id/textHeadLinesNigeria"
+        style="@style/Base.Theme.VectoNews"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:selectableItemBackgroundBorderless"
+        android:maxLines="1"
+        android:padding="5dp"
+        android:text="Get Headlines from Nigeria"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHeadLinesUs"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

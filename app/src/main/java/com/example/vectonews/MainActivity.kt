@@ -22,6 +22,7 @@ import com.example.vectonews.settings.AppSettings
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
@@ -33,14 +34,14 @@ class MainActivity : AppCompatActivity() {
         AppSettings(applicationContext)
     }
 
-    private val  handler: Handler by lazy {
+    private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
-     //   Thread.sleep(2000)  /// remember to remove this after production
+        //   Thread.sleep(2000)  /// remember to remove this after production
         applyTheme(settings.getTheme())
         setContentView(R.layout.activity_main)
         setTheme(R.style.Base_Theme_VectoNews)
@@ -64,17 +65,24 @@ class MainActivity : AppCompatActivity() {
 
         // inflate the drawer head
         val header = navigationView.inflateHeaderView(R.layout.drawer_header)
-        val imageViewer = header.findViewById<ImageView>(R.id.imageViewer)
         val settings = header.findViewById<TextView>(R.id.settings)
-        val textProfile = header.findViewById<TextView>(R.id.textProfile)
+        val textHeadLinesUs = header.findViewById<TextView>(R.id.textHeadLinesUs)
+        val textHeadLinesNigeria = header.findViewById<TextView>(R.id.textHeadLinesNigeria)
 
-        imageViewer.setOnClickListener {
-            Toast.makeText(applicationContext, "Yes Header", Toast.LENGTH_SHORT).show()
+        textHeadLinesUs.setOnClickListener {
+
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_country", "us")
+            applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        textProfile.setOnClickListener {
-            Toast.makeText(applicationContext, "Yes Header", Toast.LENGTH_SHORT).show()
+
+        textHeadLinesNigeria.setOnClickListener {
+
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_country", "ng")
+            applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
@@ -83,14 +91,12 @@ class MainActivity : AppCompatActivity() {
 
             drawerLayout.closeDrawer(GravityCompat.START)
 
-            handler.postDelayed( Runnable {
+            handler.postDelayed(Runnable {
                 if (navController.currentDestination?.id != R.id.savedFragment) {
                     navController.navigate(R.id.action_main_Home_Fragment_to_setting_theme_Fragment)
                 }
             }, 300)
         }
-
-
 
 
     }
@@ -135,9 +141,10 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         try {
             handler.removeCallbacksAndMessages(null)
-        }catch (_:Exception){}
-    }
+        } catch (_: Exception) {
+        }
 
+    }
 
 
 }
