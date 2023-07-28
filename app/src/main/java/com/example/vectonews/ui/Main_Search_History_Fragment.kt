@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,24 +13,21 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vectonews.R
-import com.example.vectonews.databinding.FragmentMainSaveBinding
+import com.example.vectonews.databinding.FragmentSearchHistoryBinding
 import com.example.vectonews.searchHistory.User
 import com.example.vectonews.searchHistory.UserViewModel
 import com.example.vectonews.settings.AppSettings
 import com.example.vectonews.ui.searchFragment.ListAdapter
-import com.example.vectonews.ui.sub_main.GalleryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class Main_Save_Fragment : Fragment(R.layout.fragment_main_save),
+class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
     ListAdapter.OnItemClickListener, ListAdapter.OnItemLongClickListener {
 
 
@@ -39,7 +35,7 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save),
 
     private val mUserViewModel by viewModels<UserViewModel>()
 
-    private var _binding: FragmentMainSaveBinding? = null
+    private var _binding: FragmentSearchHistoryBinding? = null
     private val binding get() = _binding!!
 
     private val settings: AppSettings by lazy {
@@ -49,7 +45,7 @@ class Main_Save_Fragment : Fragment(R.layout.fragment_main_save),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMainSaveBinding.bind(view)
+        _binding = FragmentSearchHistoryBinding.bind(view)
         showKeyBoard()
 
 

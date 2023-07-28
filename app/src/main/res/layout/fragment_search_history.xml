@@ -6,7 +6,7 @@
     style="@style/allParentsLayouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Main_Save_Fragment">
+    tools:context=".ui.Main_Search_History_Fragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

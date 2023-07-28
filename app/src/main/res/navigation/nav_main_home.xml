@@ -26,9 +26,9 @@
     </fragment>
     <fragment
         android:id="@+id/main_Save_Fragment"
-        android:name="com.example.vectonews.ui.Main_Save_Fragment"
+        android:name="com.example.vectonews.ui.Main_Search_History_Fragment"
         android:label="fragment_main_save"
-        tools:layout="@layout/fragment_main_save" >
+        tools:layout="@layout/fragment_search_history" >
         <action
             android:id="@+id/action_main_Save_Fragment_to_main_Home_Fragment"
             app:destination="@id/main_Home_Fragment"

@@ -65,7 +65,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     // receiving navigation command from Home and Save fragment
     class NavigationBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Handle the broadcast action here and navigate to Main_Save_Fragment
+            // Handle the broadcast action here and navigate to Main_Search_History_Fragment
             val navController = getNavController(context)
             navController.navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
         }
