@@ -8,21 +8,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SavedViewModel @Inject constructor(private  val  repository: SavedRepository):ViewModel() {
+class SavedViewModel  @Inject constructor(private val noteRepository: SavedRepository) : ViewModel() {
 
-    val allNotes : LiveData<List<SavedModel>> = repository.allNotes
+    val allNotes: LiveData<List<SavedModel>> = noteRepository.allNotes
 
-    fun  insert (savedModel: SavedModel){
+    fun insert(note: SavedModel) {
         viewModelScope.launch {
-            repository.insert(savedModel)
-        }
-
-    }
-
-    fun delete(savedModel: SavedModel){
-        viewModelScope.launch {
-            repository.delete(savedModel)
+            noteRepository.insert(note)
         }
     }
+
+    fun update(note: SavedModel) {
+        viewModelScope.launch {
+            noteRepository.update(note)
+        }
+    }
+
+    fun delete(note: SavedModel) {
+        viewModelScope.launch {
+            noteRepository.delete(note)
+        }
+    }
+
+
 
 }

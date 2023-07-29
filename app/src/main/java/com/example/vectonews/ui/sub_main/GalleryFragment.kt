@@ -16,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,16 +24,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vectonews.R
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.FragmentGalleryBinding
+import com.example.vectonews.offlinecenter.SavedModel
+import com.example.vectonews.offlinecenter.SavedViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemClickListenerMe, NewsAdapter.OnShortClickedAddItem {
+class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemClickListenerMe,
+    NewsAdapter.OnShortClickedAddItem {
+
 
     lateinit var countdownTimer: CountDownTimer
     private var seconds = 3L
 
     private val viewModel by viewModels<GalleryViewModel>()
+    private val mUserViewModel by viewModels<SavedViewModel>()
+
 
     private var _binding: FragmentGalleryBinding? = null
     private val binding get() = _binding!!
@@ -69,7 +77,10 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
             }
 
             profileImage.setOnClickListener {
-                Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
+               Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
+
+              ///  savedToDatabase("titles", "getUrl", "urlToImage")
+
             }
 
 
@@ -275,12 +286,21 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     }
 
     override fun onITemShortAdded(photo: UnsplashPhoto) {
-        val getUrl = photo.url.toString()
         val titles = photo.title.toString()
+        val getUrl = photo.url.toString()
         val urlToImage = photo.urlToImage.toString()
 
-        Toast.makeText(requireContext(), "${titles.toString()}", Toast.LENGTH_SHORT).show()
+       savedToDatabase(titles, getUrl, urlToImage)
+        Snackbar.make(binding.recyclerView, "Article Saved Successfully", Snackbar.LENGTH_SHORT).show()
 
+    }
+
+    private fun savedToDatabase(titles: String, url: String, urlToImage: String) {
+        val artciles = SavedModel(titles, url, urlToImage)
+      //  val artciles = SavedModel("titles", "url", "urlToImage")
+
+        // Add Data to Database
+         mUserViewModel.insert(artciles)
 
     }
 
