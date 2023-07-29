@@ -72,4 +72,17 @@
     </style>
 
 
+
+
+
+    <style name="Custom_Chip_group_style" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_background_color22</item>
+        <item name="android:textColor">@color/chip_text_color22</item>
+        <item name="checkedIconTint">#FFFFFF</item>
+        <item name="rippleColor">@color/whiteAlpah</item>
+    </style>
+
+
+
+
 </resources>

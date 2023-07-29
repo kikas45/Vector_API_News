@@ -99,6 +99,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
         if (urlData != "SavedData") {
             viewModel.updateCountry("us")
+          //  viewModel.updateCategory("entertainment")
+
         }
 
 
@@ -266,6 +268,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                     binding.recyclerView.isVisible = false
                     handler.postDelayed(Runnable {
                         viewModel.updateCountry(it)
+                     //   viewModel.updateCategory("entertainment")
                     }, 2000)
                 }
             }

@@ -17,6 +17,7 @@ interface UnsplashApi {
     @GET("top-headlines")
     suspend fun searchPhotos(
         @Query("country") country: String, // Pass the country as a query parameter
+        @Query("category") category: String, // Pass the category as a query parameter
         @Query("q") query: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
