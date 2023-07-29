@@ -1,6 +1,7 @@
 package com.example.vectonews.ui.sub_main
 
 
+
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,7 +11,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vectonews.R
 import com.example.vectonews.databinding.FragmentSavedBinding
@@ -33,6 +33,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
     private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
+
 
     private val adapter: SavedDetailAdapter by lazy {
         SavedDetailAdapter(this, this)
@@ -114,6 +115,11 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
         Toast.makeText(context, "" + photo.title.toString(), Toast.LENGTH_SHORT).show()
     }
+
+
+
+
+
 
     override fun onDestroy() {
         super.onDestroy()

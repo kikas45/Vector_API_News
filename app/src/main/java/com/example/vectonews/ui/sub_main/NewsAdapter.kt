@@ -1,5 +1,6 @@
 package com.example.vectonews.ui.sub_main
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -69,6 +70,7 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
 
 
 
+        @SuppressLint("SetTextI18n")
         fun bind(photo: UnsplashPhoto) {
             binding.apply {
                 Glide.with(itemView)
@@ -80,6 +82,9 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
 
 
                 textViewTitle.text = photo.title.toString()
+                val surce = photo.source.name
+                val date = photo.publishedAt
+                textSourceName.text = surce + " :: " + date
             }
         }
     }

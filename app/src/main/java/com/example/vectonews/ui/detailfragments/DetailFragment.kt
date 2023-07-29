@@ -2,6 +2,7 @@ package com.example.vectonews.ui.detailfragments
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.example.vectonews.R
 import com.example.vectonews.databinding.FragmentDetailBinding
+import com.example.vectonews.settings.AppSettings
 
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
@@ -24,11 +26,19 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
+    private val settings: AppSettings by lazy {
+        AppSettings(requireContext().applicationContext)
+    }
+
+
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDetailBinding.bind(view)
+
+
+        changeToolabrColor()
 
 
         binding.apply {
@@ -112,6 +122,23 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
         requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
     }
+
+
+    @SuppressLint("ObsoleteSdkInt")
+    private fun changeToolabrColor() {
+
+
+        if (settings.getTheme() == AppSettings.THEME_LIGHT) {
+            activity?.window?.statusBarColor = Color.parseColor("#E8EDFA")
+
+        } else {
+            activity?.window?.statusBarColor = Color.parseColor("#2E2E2E")
+
+        }
+
+
+    }
+
 
 
     override fun onDestroy() {
