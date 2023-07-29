@@ -11,8 +11,8 @@ import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.ItemUnsplashPhotoBinding
 
 
-class ProductsAdapter(private val listener: OnItemClickListenerMe) :
-    PagingDataAdapter<UnsplashPhoto, ProductsAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
+class NewsAdapter(private val listener: OnItemClickListenerMe, private val shortListner: OnShortClickedAddItem) :
+    PagingDataAdapter<UnsplashPhoto, NewsAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val binding =
@@ -33,6 +33,12 @@ class ProductsAdapter(private val listener: OnItemClickListenerMe) :
         fun onItemClickedMe(photo: UnsplashPhoto)
     }
 
+    interface OnShortClickedAddItem {
+        fun onITemShortAdded(photo: UnsplashPhoto)
+    }
+
+
+
     inner class PhotoViewHolder(private val binding: ItemUnsplashPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -47,6 +53,18 @@ class ProductsAdapter(private val listener: OnItemClickListenerMe) :
                 }
 
             }
+
+            binding.imageViewBookmark.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION){
+                    val item = getItem(position)
+                    if (item != null){
+                        shortListner.onITemShortAdded(item)
+                    }
+                }
+
+            }
+
         }
 
 

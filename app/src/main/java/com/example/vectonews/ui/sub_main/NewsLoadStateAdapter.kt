@@ -3,15 +3,14 @@ package com.example.vectonews.ui.sub_main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vectonews.databinding.UnsplashPhotoLoadStateFooterBinding
 
-class UnsplashPhotoLoadStateAdapter(private val retry: () -> Unit) :
-    LoadStateAdapter<UnsplashPhotoLoadStateAdapter.LoadStateViewHolder>() {
+class NewsLoadStateAdapter(private val retry: () -> Unit) :
+    LoadStateAdapter<NewsLoadStateAdapter.LoadStateViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
         val binding = UnsplashPhotoLoadStateFooterBinding.inflate(

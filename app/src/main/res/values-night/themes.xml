@@ -53,4 +53,29 @@
     </style>
 
 
+    <!--   this works for the unsplash Layout xml for recycler view   -->
+    <style name="unsplashtsyle">
+        <item name="android:background">@drawable/gradient_dark</item>
+    </style>
+
+
+
+
+    <!-- This is for our app themes -->
+
+    <style name="MyAppThemes" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black_shade_1</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
+
+        <item name="postSplashScreenTheme">@style/Base.Theme.VectoNews</item>
+
+        <!--  <item name="windowSplashScreenAnimationDuration">200</item>-->
+
+        <item name="windowSplashScreenIconBackgroundColor">@color/black_shade_1</item>
+
+    </style>
+
+
+
 </resources>

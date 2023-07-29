@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -24,7 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     private lateinit var navController: NavController
-    private val navigationBroadcastReceiver = NavigationBroadcastReceiver()
+
+    private val navigationBroadcastReceiver: NavigationBroadcastReceiver by lazy {
+        NavigationBroadcastReceiver()
+    }
 
     private var _binding: FragmentMainHomeBinding? = null
     private val binding get() = _binding!!
@@ -32,7 +36,6 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     private val settings: AppSettings by lazy {
         AppSettings(requireContext().applicationContext)
     }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,11 +46,12 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         requireContext().registerReceiver(navigationBroadcastReceiver, filter)
 
 
-
-        val navHostFragment = childFragmentManager.findFragmentById(R.id.fragmentChildContainer) as NavHostFragment
+        val navHostFragment =
+            childFragmentManager.findFragmentById(R.id.fragmentChildContainer) as NavHostFragment
         navController = navHostFragment.navController
 
-        val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottomChildNavigationView)
+        val bottomNavigationView =
+            view.findViewById<BottomNavigationView>(R.id.bottomChildNavigationView)
         bottomNavigationView.setupWithNavController(navController)
 
 
@@ -57,18 +61,30 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
     }
 
 
-
-
     // receiving navigation command from Home and Save fragment
     class NavigationBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Handle the broadcast action here and navigate to Main_Save_Fragment
-            val navController = getNavController(context)
-            navController.navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
+            val navControl = getNavController(context)
+
+            val newCountry = intent.getStringExtra("Navigation")
+            val titles = intent.getStringExtra("titles")
+            if (newCountry.equals("Navigate_to_SearchHistoryFragment")) {
+                navControl.navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
+
+            } else {
+
+                val bundle = Bundle().apply {
+
+                    putString("urls_webView", newCountry.toString())
+                    putString("titles", titles.toString())
+
+                }
+
+                navControl.navigate(R.id.action_main_Home_Fragment_to_detailFragment, bundle)
+            }
         }
 
         private fun getNavController(context: Context): NavController {
-            // accessing the container fragment in Main activity
             val navHostFragment = (context as AppCompatActivity).supportFragmentManager
                 .findFragmentById(R.id.fragmentContainerView) as NavHostFragment
             return navHostFragment.navController
@@ -80,21 +96,25 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
         try {
             requireContext().unregisterReceiver(navigationBroadcastReceiver)
-        }catch (io:Exception){}
+            _binding = null
+        } catch (_: Exception) {
+        }
+
     }
 
 
     @SuppressLint("ObsoleteSdkInt")
     private fun changeToolbarColor() {
 
-        if (settings.getTheme() == AppSettings.THEME_LIGHT){
+        if (settings.getTheme() == AppSettings.THEME_LIGHT) {
             activity?.window?.statusBarColor = Color.parseColor("#FFFFFF")
 
-        }else{
+        } else {
             activity?.window?.statusBarColor = Color.parseColor("#1E1D1D")
 
         }
 
     }
+
 
 }

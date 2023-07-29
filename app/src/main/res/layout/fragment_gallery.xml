@@ -77,7 +77,7 @@
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/editClear"
+                    android:id="@+id/profileImage"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:clickable="true"
@@ -106,7 +106,7 @@
                     android:text="Search Vector News"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/editClear"
+                    app:layout_constraintEnd_toStartOf="@+id/profileImage"
                     app:layout_constraintStart_toEndOf="@+id/hamburger"
                     app:layout_constraintTop_toTopOf="@+id/editText"
                     tools:ignore="HardcodedText,RtlSymmetry" />
@@ -118,9 +118,9 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_motion_fragment"
+            style="@style/allParentsLayouts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            style="@style/allParentsLayouts"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:layout_constraintBottom_toTopOf="@+id/progressbar_small"
             app:layout_constraintEnd_toEndOf="parent"
@@ -135,9 +135,7 @@
                 android:fitsSystemWindows="true" />
 
 
-
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -148,7 +146,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="250dp"
+        android:layout_marginBottom="20dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -156,31 +154,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
     <TextView
         android:id="@+id/text_view_error"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_retry"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="Results could not be loaded"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/button_retry"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/button_retry"
-        android:layout_width="90dp"
-        android:layout_height="45dp"
-        android:layout_centerInParent="true"
-        android:text="Retry"
-        android:visibility="gone"
-        style="@style/searchBarRound"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:elegantTextHeight="true"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="center"
+        android:justificationMode="inter_word"
+        android:text="Results could not be loaded"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +180,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="32dp"
         android:text="No results found for this query"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/text_view_error"
@@ -200,6 +188,15 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
+
+<!--
+    <View
+        android:id="@+id/v_blackScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        tools:visibility="gone" />
+-->
 
 
 
