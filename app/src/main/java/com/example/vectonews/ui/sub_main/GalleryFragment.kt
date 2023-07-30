@@ -77,9 +77,9 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
             }
 
             profileImage.setOnClickListener {
-               Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
 
-              ///  savedToDatabase("titles", "getUrl", "urlToImage")
+                ///  savedToDatabase("titles", "getUrl", "urlToImage")
 
             }
 
@@ -98,8 +98,11 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         val urlData = sharedDass.getString("search", "")
 
         if (urlData != "SavedData") {
-            viewModel.updateCountry("us")
-          //  viewModel.updateCategory("entertainment")
+
+            // Note : a default value is already passed , but we will
+            // need this when trying to pass and remember other arguments
+            //   viewModel.updateCountry("us")
+            //  viewModel.updateCategory("")
 
         }
 
@@ -268,9 +271,20 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                     binding.recyclerView.isVisible = false
                     handler.postDelayed(Runnable {
                         viewModel.updateCountry(it)
-                     //   viewModel.updateCategory("entertainment")
                     }, 2000)
                 }
+
+
+                val newCategory = intent.getStringExtra("New_Category")
+                newCategory?.let {
+                    binding.progressBar.isVisible = true
+                    binding.textViewError.isVisible = false
+                    binding.recyclerView.isVisible = false
+                    handler.postDelayed(Runnable {
+                        viewModel.updateCategory(it)
+                    }, 2000)
+                }
+
             }
         }
 
@@ -293,17 +307,18 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         val getUrl = photo.url.toString()
         val urlToImage = photo.urlToImage.toString()
 
-       savedToDatabase(titles, getUrl, urlToImage)
-        Snackbar.make(binding.recyclerView, "Article Saved Successfully", Snackbar.LENGTH_SHORT).show()
+        savedToDatabase(titles, getUrl, urlToImage)
+        Snackbar.make(binding.recyclerView, "Article Saved Successfully", Snackbar.LENGTH_SHORT)
+            .show()
 
     }
 
     private fun savedToDatabase(titles: String, url: String, urlToImage: String) {
         val artciles = SavedModel(titles, url, urlToImage)
-      //  val artciles = SavedModel("titles", "url", "urlToImage")
+        //  val artciles = SavedModel("titles", "url", "urlToImage")
 
         // Add Data to Database
-         mUserViewModel.insert(artciles)
+        mUserViewModel.insert(artciles)
 
     }
 

@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
@@ -69,15 +68,62 @@ class MainActivity : AppCompatActivity() {
         // inflate the drawer head
         val header = navigationView.inflateHeaderView(R.layout.drawer_header)
 
-        val settings = header.findViewById<TextView>(R.id.settings)
+        val settings = header.findViewById<TextView>(R.id.textSettings)
 
         val textHeadLinesUs = header.findViewById<Chip>(R.id.textHeadLinesUs)
         val textHeadLinesNigeria = header.findViewById<Chip>(R.id.textHeadLinesNigeria)
         val textHeadLinesCanada = header.findViewById<TextView>(R.id.textHeadLinesCanada)
         val textHeadLinesSouthAfrica = header.findViewById<Chip>(R.id.textHeadLinesSouthAfrica)
 
+        // for category
+        val textAll = header.findViewById<Chip>(R.id.textAll)
+        val textSport = header.findViewById<Chip>(R.id.textSport)
+        val textEntertainment = header.findViewById<Chip>(R.id.textEntertainment)
+        val textBussiness = header.findViewById<Chip>(R.id.textBussiness)
+        val textHealth = header.findViewById<Chip>(R.id.textHealth)
 
 
+
+        textAll.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        textSport.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "sport")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        textBussiness.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "business")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        textEntertainment.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "entertainment")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+
+        textHealth.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "health")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+
+
+
+        // for the countries
 
         textHeadLinesSouthAfrica.setOnClickListener {
             saveSelectedCountry("sa")
@@ -86,6 +132,8 @@ class MainActivity : AppCompatActivity() {
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+
+
         textHeadLinesCanada.setOnClickListener {
             saveSelectedCountry("ca")
 
@@ -104,9 +152,11 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
         textHeadLinesNigeria.setOnClickListener {
 
             saveSelectedCountry("ng")
+
             val intent = Intent("Gallery_Fragment")
             intent.putExtra("New_country", "ng")
             applicationContext.sendBroadcast(intent)
@@ -165,9 +215,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
-
     override fun onDestroy() {
         super.onDestroy()
         try {
@@ -191,7 +238,6 @@ class MainActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         return sharedPref.getString("selected_country", "us") ?: "us"
     }
-
 
 
 }
