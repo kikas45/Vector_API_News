@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.vectonews.R
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.ItemUnsplashPhotoBinding
 
@@ -77,7 +78,6 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
                     .load(photo.urlToImage + "")
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView)
 
 
@@ -85,6 +85,19 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
                 val surce = photo.source.name
                 val date = photo.publishedAt
                 textSourceName.text = surce + " :: " + date
+
+
+
+                // Update the bookmark icon based on the 'isSaved' field
+                if (photo.isSaved) {
+                    // Display the saved bookmark icon
+                    imageViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
+                } else {
+                    // Display the unsaved bookmark icon
+                    imageViewBookmark.setImageResource(R.drawable.ic_bookmark_unselected)
+                }
+
+
             }
         }
     }

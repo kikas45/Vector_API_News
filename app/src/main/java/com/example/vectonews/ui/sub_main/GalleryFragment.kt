@@ -16,15 +16,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vectonews.R
+import com.example.vectonews.api.Source
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.FragmentGalleryBinding
-import com.example.vectonews.offlinecenter.SavedModel
 import com.example.vectonews.offlinecenter.SavedViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -306,20 +304,22 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         val titles = photo.title.toString()
         val getUrl = photo.url.toString()
         val urlToImage = photo.urlToImage.toString()
+        val name = photo.source.name.toString()
 
-        savedToDatabase(titles, getUrl, urlToImage)
+        savedToDatabase(titles, getUrl, urlToImage, name )
         Snackbar.make(binding.recyclerView, "Article Saved Successfully", Snackbar.LENGTH_SHORT)
             .show()
 
     }
 
-    private fun savedToDatabase(titles: String, url: String, urlToImage: String) {
-        val artciles = SavedModel(titles, url, urlToImage)
+    private fun savedToDatabase(titles: String, url: String, urlToImage: String, userName: String) {
+        val _userName = Source("", userName)
+
+        val artciles = UnsplashPhoto(titles, url, urlToImage, _userName, "")
         //  val artciles = SavedModel("titles", "url", "urlToImage")
 
         // Add Data to Database
         mUserViewModel.insert(artciles)
-
     }
 
 

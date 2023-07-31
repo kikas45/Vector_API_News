@@ -79,6 +79,9 @@
         <item name="chipBackgroundColor">@color/chip_background_color22</item>
         <item name="android:textColor">@color/chip_text_color22</item>
         <item name="checkedIconTint">#FFFFFF</item>
+        <item name="checkedIconEnabled">false</item>
+        <item name="checkedIcon">@null</item>
+        <item name="chipEndPadding">5dp</item>
         <item name="rippleColor">@color/whiteAlpah</item>
     </style>
 

@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.vectonews.R
+import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.CustomSavedRowBinding
 
 class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, private val onLongListener:OnItemLongClickListenerSaved): RecyclerView.Adapter<SavedDetailAdapter.MyViewHolder>() {
 
 
-    private var userList = emptyList<SavedModel>()
+    private var userList = emptyList<UnsplashPhoto>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -22,12 +23,12 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
     }
 
     interface OnItemClickListenerDetails {
-        fun onclickDetailsItem(photo: SavedModel)
+        fun onclickDetailsItem(photo: UnsplashPhoto)
 
     }
 
     interface OnItemLongClickListenerSaved {
-        fun onItemLongClickedSaved(photo: SavedModel)
+        fun onItemLongClickedSaved(photo: UnsplashPhoto)
     }
 
     inner class MyViewHolder(private val binding: CustomSavedRowBinding) :
@@ -63,7 +64,7 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
 
 
 
-        fun bind(photo: SavedModel) {
+        fun bind(photo: UnsplashPhoto) {
             binding.apply {
                 Glide.with(itemView)
                     .load(photo.urlToImage)
@@ -93,7 +94,7 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(user: List<SavedModel>){
+    fun setData(user: List<UnsplashPhoto>){
         this.userList = user
         notifyDataSetChanged()
 

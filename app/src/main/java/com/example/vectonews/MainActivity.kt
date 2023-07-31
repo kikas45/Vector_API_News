@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         val textHeadLinesNigeria = header.findViewById<Chip>(R.id.textHeadLinesNigeria)
         val textHeadLinesCanada = header.findViewById<TextView>(R.id.textHeadLinesCanada)
         val textHeadLinesSouthAfrica = header.findViewById<Chip>(R.id.textHeadLinesSouthAfrica)
+        val textHeadLinesUK = header.findViewById<Chip>(R.id.textHeadLinesUK)
 
         // for category
         val textAll = header.findViewById<Chip>(R.id.textAll)
@@ -81,6 +82,9 @@ class MainActivity : AppCompatActivity() {
         val textEntertainment = header.findViewById<Chip>(R.id.textEntertainment)
         val textBussiness = header.findViewById<Chip>(R.id.textBussiness)
         val textHealth = header.findViewById<Chip>(R.id.textHealth)
+        val textScience = header.findViewById<Chip>(R.id.textScience)
+        val textTechnology = header.findViewById<Chip>(R.id.textTechnology)
+
 
 
 
@@ -94,6 +98,19 @@ class MainActivity : AppCompatActivity() {
         textSport.setOnClickListener {
             val intent = Intent("Gallery_Fragment")
             intent.putExtra("New_Category", "sport")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        textTechnology.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "technology")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        textScience.setOnClickListener {
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_Category", "science")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -159,6 +176,16 @@ class MainActivity : AppCompatActivity() {
 
             val intent = Intent("Gallery_Fragment")
             intent.putExtra("New_country", "ng")
+            applicationContext.sendBroadcast(intent)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        textHeadLinesUK.setOnClickListener {
+
+            saveSelectedCountry("ng")
+
+            val intent = Intent("Gallery_Fragment")
+            intent.putExtra("New_country", "gb")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }

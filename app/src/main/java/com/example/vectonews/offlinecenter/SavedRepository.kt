@@ -1,5 +1,6 @@
 package com.example.vectonews.offlinecenter
 
+import com.example.vectonews.api.UnsplashPhoto
 import javax.inject.Inject
 
 class SavedRepository @Inject constructor( private  val savedDatabase: SavedDatabase) {
@@ -8,15 +9,15 @@ class SavedRepository @Inject constructor( private  val savedDatabase: SavedData
 
     val allNotes = savedDatabase.noteDao().getAllNotes()
 
-    suspend fun insert(note: SavedModel) {
+    suspend fun insert(note: UnsplashPhoto) {
         savedDatabase.noteDao().insert(note)
     }
 
-    suspend fun update(note: SavedModel) {
+    suspend fun update(note: UnsplashPhoto) {
         savedDatabase.noteDao().update(note)
     }
 
-    suspend fun delete(note: SavedModel) {
+    suspend fun delete(note: UnsplashPhoto) {
         savedDatabase.noteDao().delete(note)
     }
 

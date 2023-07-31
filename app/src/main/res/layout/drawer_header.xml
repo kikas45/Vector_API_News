@@ -66,31 +66,17 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
 
-
-
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroup_year"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
@@ -99,8 +85,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Us"
-            android:textSize="16sp" />
+            android:text="USA"
+            android:textSize="13sp" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/textHeadLinesUK"
+            style="@style/Custom_Chip_group_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UK"
+            android:textSize="13sp" />
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/textHeadLinesNigeria"
@@ -108,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nigeria"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/textHeadLinesCanada"
@@ -116,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Canada"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/textHeadLinesSouthAfrica"
@@ -124,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="South Africa"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
 
     </com.google.android.material.chip.ChipGroup>
@@ -156,19 +152,17 @@
 
 
     <View
-        android:id="@+id/divider4"
+        android:id="@+id/divider5"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
+        app:layout_constraintTop_toBottomOf="@+id/chipGroupCategory" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupCategory"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
@@ -176,7 +170,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
@@ -186,7 +180,25 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="All"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/textBussiness"
+            style="@style/Custom_Chip_group_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Business"
+            android:textSize="13sp" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/textEntertainment"
+            style="@style/Custom_Chip_group_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Entertainment"
+            android:textSize="13sp" />
 
 
         <com.google.android.material.chip.Chip
@@ -195,23 +207,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sport"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/textEntertainment"
-            style="@style/Custom_Chip_group_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Entertain"
-            android:textSize="16sp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/textBussiness"
-            style="@style/Custom_Chip_group_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Business"
-            android:textSize="16sp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/textHealth"
@@ -219,7 +216,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Health"
-            android:textSize="16sp"
+            android:textSize="13sp"
+            tools:ignore="HardcodedText" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/textScience"
+            style="@style/Custom_Chip_group_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Science "
+            android:textSize="13sp"
+            tools:ignore="HardcodedText" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/textTechnology"
+            style="@style/Custom_Chip_group_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Technology "
+            android:textSize="13sp"
             tools:ignore="HardcodedText" />
 
 
@@ -255,10 +271,8 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroupCategory"
+        app:layout_constraintTop_toBottomOf="@+id/divider5"
         tools:ignore="RtlSymmetry" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,9 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vectonews.R
+import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.FragmentSavedBinding
 import com.example.vectonews.offlinecenter.SavedDetailAdapter
-import com.example.vectonews.offlinecenter.SavedModel
 import com.example.vectonews.offlinecenter.SavedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -81,7 +81,13 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
             adapter.setData(it)
         })
 
+
     }
+
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -99,7 +105,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
         requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
     }
 
-    override fun onclickDetailsItem(photo: SavedModel) {
+    override fun onclickDetailsItem(photo: UnsplashPhoto) {
         val bundle = Bundle().apply {
 
             putString("title", photo.title.toString())
@@ -111,12 +117,10 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
     }
 
-    override fun onItemLongClickedSaved(photo: SavedModel) {
+    override fun onItemLongClickedSaved(photo: UnsplashPhoto) {
 
         Toast.makeText(context, "" + photo.title.toString(), Toast.LENGTH_SHORT).show()
     }
-
-
 
 
 
