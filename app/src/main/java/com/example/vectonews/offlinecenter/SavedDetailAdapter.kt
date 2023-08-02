@@ -64,20 +64,23 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
 
 
 
+        @SuppressLint("SetTextI18n")
         fun bind(photo: UnsplashPhoto) {
             binding.apply {
                 Glide.with(itemView)
-                    .load(photo.urlToImage)
+                    .load(photo.urlToImage + "")
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .error(R.drawable.ic_launcher_background)
-                    .into(imageTV)
+                    .into(imageView)
 
-                textDescription.text = photo.title
+
+                textViewTitle.text = photo.title.toString()
+                val surce = photo.source.name
+                val date = photo.publishedAt
+                textSourceName.text = surce + " :: " + date
             }
         }
-
-    }
+        }
 
 
 

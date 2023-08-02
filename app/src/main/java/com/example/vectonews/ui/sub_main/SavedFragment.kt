@@ -1,7 +1,8 @@
 package com.example.vectonews.ui.sub_main
 
 
-
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,14 +14,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vectonews.R
+import com.example.vectonews.api.Source
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.FragmentSavedBinding
 import com.example.vectonews.offlinecenter.SavedDetailAdapter
 import com.example.vectonews.offlinecenter.SavedViewModel
+import com.example.vectonews.searchHistory.User
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-
 class SavedFragment : Fragment(R.layout.fragment_saved),
     SavedDetailAdapter.OnItemClickListenerDetails, SavedDetailAdapter.OnItemLongClickListenerSaved {
 
@@ -39,6 +41,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
         SavedDetailAdapter(this, this)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,7 +50,29 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
         binding.apply {
 
+
             try {
+
+                hamburger.setOnClickListener {
+                    val intent = Intent("MainActivity")
+                    requireContext().sendBroadcast(intent)
+                }
+
+                profileImage.setOnClickListener {
+                    Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
+
+                }
+
+
+
+
+                textsearch.setOnClickListener {
+                    val intent = Intent("Main_Home_Fragment")
+                    intent.putExtra("Navigation", "Navigate_to_SearchHistoryFragment")
+                    requireContext().sendBroadcast(intent)
+
+                }
+
 
                 swipeMotionFragment.setOnRefreshListener {
                     fectdatafromRoomBase()
@@ -74,6 +99,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
         fectdatafromRoomBase()
 
+
     }
 
     private fun fectdatafromRoomBase() {
@@ -83,10 +109,6 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
 
     }
-
-
-
-
 
 
     override fun onDestroyView() {
@@ -119,16 +141,32 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
     override fun onItemLongClickedSaved(photo: UnsplashPhoto) {
 
-        Toast.makeText(context, "" + photo.title.toString(), Toast.LENGTH_SHORT).show()
+        deleteAllUsers(photo)
     }
-
-
 
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
     }
+
+    private fun deleteAllUsers(photo: UnsplashPhoto) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes") { _, _ ->
+            mUserViewModel.delete(photo)
+            Toast.makeText(
+                requireContext(),
+                "Successfully removed everything",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        builder.setNegativeButton("No") { _, _ -> }
+        builder.setTitle("Delete everything?")
+        builder.setMessage("Are you sure you want to delete everything?")
+        builder.create().show()
+    }
+
+
 
 }
 

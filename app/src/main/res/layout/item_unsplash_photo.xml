@@ -65,7 +65,7 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_bookmark_unselected"
                 app:layout_constraintBottom_toBottomOf="@+id/textSourceName"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textSourceName" />
 
             <TextView
@@ -73,7 +73,7 @@
                 style="@style/Base.Theme.VectoNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
@@ -81,9 +81,23 @@
                 android:text="Google News  Published on ; 20/2023"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/text_view_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/image_view_bookmark"
+                app:layout_constraintEnd_toStartOf="@+id/image_view_bookmark"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:selectableItemBackgroundBorderless"
+                android:padding="6dp"
+                android:src="@drawable/ic_comment_24"
+                app:layout_constraintBottom_toBottomOf="@+id/textSourceName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textSourceName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

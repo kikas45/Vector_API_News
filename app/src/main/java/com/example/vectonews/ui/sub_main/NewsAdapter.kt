@@ -3,6 +3,10 @@ package com.example.vectonews.ui.sub_main
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +15,15 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.vectonews.R
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.ItemUnsplashPhotoBinding
+import com.example.vectonews.offlinecenter.SavedViewModel
 
 
-class NewsAdapter(private val listener: OnItemClickListenerMe, private val shortListner: OnShortClickedAddItem) :
+class NewsAdapter(
+    private val listener: OnItemClickListenerMe,
+    private val shortListner: OnShortClickedAddItem,
+    private val savedViewModel: SavedViewModel,
+    private val lifecycleOwner: LifecycleOwner
+) :
     PagingDataAdapter<UnsplashPhoto, NewsAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
@@ -28,10 +38,25 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
 
         if (currentItem != null) {
             holder.bind(currentItem)
+
+            if (currentItem.isSaved){
+                holder.updateBookmarkIcon(currentItem.isSaved)
+            }
+
+            savedViewModel.allNotes.observe(lifecycleOwner) { notes ->
+                val isSaved = notes.any { note -> note.title == currentItem.title }
+                currentItem.isSaved = isSaved
+                holder.updateBookmarkIcon(isSaved)
+            }
+
         }
+
+
+
+
     }
 
-    interface OnItemClickListenerMe{
+    interface OnItemClickListenerMe {
         fun onItemClickedMe(photo: UnsplashPhoto)
     }
 
@@ -40,29 +65,36 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
     }
 
 
-
     inner class PhotoViewHolder(private val binding: ItemUnsplashPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     val item = getItem(position)
-                    if (item != null){
+                    if (item != null) {
                         listener.onItemClickedMe(item)
                     }
                 }
 
             }
 
+
+
+
+
             binding.imageViewBookmark.setOnClickListener {
                 val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     val item = getItem(position)
-                    if (item != null){
+                    if (item != null) {
                         shortListner.onITemShortAdded(item)
+
+                        updateBookmarkIcon(item.isSaved)
+
                     }
+
                 }
 
             }
@@ -85,22 +117,24 @@ class NewsAdapter(private val listener: OnItemClickListenerMe, private val short
                 val surce = photo.source.name
                 val date = photo.publishedAt
                 textSourceName.text = surce + " :: " + date
-
-
-
-                // Update the bookmark icon based on the 'isSaved' field
-                if (photo.isSaved) {
-                    // Display the saved bookmark icon
-                    imageViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
-                } else {
-                    // Display the unsaved bookmark icon
-                    imageViewBookmark.setImageResource(R.drawable.ic_bookmark_unselected)
-                }
-
-
+               // updateBookmarkIcon(photo.isSaved)
             }
         }
+
+
+        fun updateBookmarkIcon(isSaved: Boolean) {
+            if (isSaved) {
+                // Display the saved bookmark icon
+                binding.imageViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
+            } else {
+                // Display the unsaved bookmark icon
+                binding.imageViewBookmark.setImageResource(R.drawable.ic_bookmark_unselected)
+            }
+        }
+
+
     }
+
 
 
 

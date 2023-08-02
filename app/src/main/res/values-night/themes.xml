@@ -50,6 +50,7 @@
     <!--   this works for the bottom navigation background   -->
     <style name="bottomNavBar">
         <item name="android:background">@color/dark_bottom_nav</item>
+        <item name="itemFillColor">@color/red_color</item>
     </style>
 
 

@@ -7,13 +7,14 @@ import com.example.vectonews.api.UnsplashPhoto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class SavedViewModel  @Inject constructor(private val noteRepository: SavedRepository) : ViewModel() {
 
     val allNotes: LiveData<List<UnsplashPhoto>> = noteRepository.allNotes
 
     fun insert(note: UnsplashPhoto) {
+
+      ///  note.isSaved = true
         viewModelScope.launch {
             noteRepository.insert(note)
         }
@@ -26,6 +27,8 @@ class SavedViewModel  @Inject constructor(private val noteRepository: SavedRepos
     }
 
     fun delete(note: UnsplashPhoto) {
+
+     //   note.isSaved = false
         viewModelScope.launch {
             noteRepository.delete(note)
         }

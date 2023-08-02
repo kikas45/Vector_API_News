@@ -120,6 +120,7 @@
             android:id="@+id/swipe_motion_fragment"
             style="@style/allParentsLayouts"
             android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
             android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:layout_constraintBottom_toTopOf="@+id/progressbar_small"

@@ -16,7 +16,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vectonews.R
@@ -26,6 +29,7 @@ import com.example.vectonews.databinding.FragmentGalleryBinding
 import com.example.vectonews.offlinecenter.SavedViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -44,7 +48,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     private val binding get() = _binding!!
 
     private val adapter: NewsAdapter by lazy {
-        NewsAdapter(this, this)
+        NewsAdapter(this, this, mUserViewModel, viewLifecycleOwner)
     }
 
     private val sharedDass: SharedPreferences by lazy {
@@ -116,6 +120,9 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                     header = NewsLoadStateAdapter { adapter.retry() },
                     footer = NewsLoadStateAdapter { adapter.retry() }
                 )
+            //    adapter.observeSavedStatus(viewLifecycleOwner)
+
+
             } catch (_: Exception) {
             }
 
@@ -251,10 +258,14 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
     private fun makeAPIRequest() {
         // viewModel.updateCountry("ng")
-
+//
         viewModel.photos.observe(viewLifecycleOwner) {
             adapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
+
+
+
+
 
     }
 
@@ -301,26 +312,52 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     }
 
     override fun onITemShortAdded(photo: UnsplashPhoto) {
+
+        if (photo.isSaved) {
+            removeArticleFromDatabase(photo)
+
+        } else {
+            savedToDatabase(photo)
+
+        }
+
+
+    }
+
+    private fun removeArticleFromDatabase(photo: UnsplashPhoto) {
+        photo.isSaved = false
+        mUserViewModel.delete(photo)
+
+        Snackbar.make(binding.recyclerView, "Article Removed Successfully", Snackbar.LENGTH_SHORT)
+            .setAction("Undo", View.OnClickListener {
+                savedToDatabase(photo)
+            })
+            .setActionTextColor(resources.getColor(R.color.red_color))
+
+
+            .show()
+
+
+    }
+
+    private fun savedToDatabase(photo: UnsplashPhoto) {
+        photo.isSaved = true
+
         val titles = photo.title.toString()
         val getUrl = photo.url.toString()
         val urlToImage = photo.urlToImage.toString()
         val name = photo.source.name.toString()
+        val date = photo.publishedAt.toString()
 
-        savedToDatabase(titles, getUrl, urlToImage, name )
+        val _userName = Source("", name)
+        val artciles = UnsplashPhoto(titles, getUrl, urlToImage, _userName, date)
+        mUserViewModel.insert(artciles)
+
         Snackbar.make(binding.recyclerView, "Article Saved Successfully", Snackbar.LENGTH_SHORT)
             .show()
 
     }
 
-    private fun savedToDatabase(titles: String, url: String, urlToImage: String, userName: String) {
-        val _userName = Source("", userName)
-
-        val artciles = UnsplashPhoto(titles, url, urlToImage, _userName, "")
-        //  val artciles = SavedModel("titles", "url", "urlToImage")
-
-        // Add Data to Database
-        mUserViewModel.insert(artciles)
-    }
 
 
 }

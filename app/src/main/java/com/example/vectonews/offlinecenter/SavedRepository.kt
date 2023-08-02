@@ -9,6 +9,8 @@ class SavedRepository @Inject constructor( private  val savedDatabase: SavedData
 
     val allNotes = savedDatabase.noteDao().getAllNotes()
 
+
+
     suspend fun insert(note: UnsplashPhoto) {
         savedDatabase.noteDao().insert(note)
     }

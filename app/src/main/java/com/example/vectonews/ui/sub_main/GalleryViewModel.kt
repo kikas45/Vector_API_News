@@ -6,8 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.data.UnsplashRepository
+import com.example.vectonews.offlinecenter.SavedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -45,4 +48,6 @@ class GalleryViewModel @Inject constructor(
         private const val DEFAULT_CATEGORY = ""  // you can pass parameters like sport, business, entertainment, by default
                                                 // if no parameter is passed, it fetch all
     }
+
+
 }
