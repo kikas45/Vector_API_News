@@ -9,13 +9,13 @@ import javax.inject.Inject
 class UnsplashRepository @Inject constructor(val newsApi: UnsplashApi) {
 
 
-    fun getSearchResults(query: String, country: String, category: String) =
+    fun getNewsRequest(query: String, apiKey:String, country: String, category: String) =
         Pager(
             config = PagingConfig(
                 pageSize = 6,
                 maxSize = 20,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { UnsplashPagingSource(newsApi, query, country, category) }
+            pagingSourceFactory = { UnsplashPagingSource(newsApi,apiKey, query, country, category) }
         ).liveData
 }

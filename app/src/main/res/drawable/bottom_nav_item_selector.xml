@@ -1,5 +1,0 @@
-<!-- bottom_nav_item_selector.xml -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:color="@color/black_shade_2"/>
-    <item android:color="@android:color/transparent" />
-</selector>

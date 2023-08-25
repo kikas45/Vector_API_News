@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_nav_sub_home.xml"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/gallaryFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/gallaryFragment"
         android:name="com.example.vectonews.ui.sub_main.GalleryFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_gallery" />

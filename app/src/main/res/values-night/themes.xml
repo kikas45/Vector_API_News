@@ -2,37 +2,53 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.VectoNews" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-
         <item name="colorPrimary">#FFFFFF</item>
         <item name="colorPrimaryVariant">#039BE5</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">#039BE5</item>  <!--this affect prpgressbar-->
-
         <item name="colorSecondaryVariant">#039BE5</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor" >@color/black</item>
-        <!-- Customize your theme here. -->
-
-
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
-
-
         <item name="android:navigationBarColor">@color/dark_bottom_nav</item>
-
-
-        <!--  This is used for to change the vector images color -->
         <item name="colorControlNormal">#FFFFFF</item>
 
 
 
 
     </style>
+
+
+
+
+
+
+
+
+    <!--for round download Bottom sheet -->
+    <style name="roundDowload">
+        <item name="android:background">@drawable/bottom_sheet_bg_extreme_dark</item>
+    </style>
+
+
+
     <!--        This would style the search bar on the main home Fragment -->
     <style name="searchBarRound">
         <item name="android:background">@drawable/round_search_corners_dark</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="searchRectangle">
+        <item name="android:background">@drawable/round_search_corners_dark_rectangle</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+
+    <style name="styleForTextAndButton">
+        <item name="android:background">@drawable/round_text_corners_dark_rectangle</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 
@@ -41,16 +57,23 @@
         <item name="android:background">@color/black_shade_1</item>
     </style>
 
+
+
+    <style name="simpleViewDivider">
+        <item name="android:background">#E8EDFA</item>
+    </style>
+
+
     <!--   this work for switching background for all parent layouts  -->
     <style name="allParentsLayouts">
         <item name="android:background">@color/black_gray_1</item>
     </style>
 
 
+
     <!--   this works for the bottom navigation background   -->
     <style name="bottomNavBar">
         <item name="android:background">@color/dark_bottom_nav</item>
-        <item name="itemFillColor">@color/red_color</item>
     </style>
 
 
@@ -91,6 +114,16 @@
         <item name="rippleColor">@color/whiteAlpah</item>
     </style>
 
+
+
+
+
+
+    <style name="BottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:background">@color/black_gray_1</item>
+    </style>
 
 
 

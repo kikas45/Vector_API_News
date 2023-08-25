@@ -78,12 +78,11 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profileImage"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:selectableItemBackgroundBorderless"
-                    android:padding="10dp"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="-16dp"
+
+                    android:padding="8dp"
                     android:src="@drawable/ic_launcher_background"
                     android:visibility="visible"
                     app:civ_border_color="#3C3737"
@@ -135,7 +134,6 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true" />
 
-
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
@@ -168,12 +166,12 @@
         android:justificationMode="inter_word"
         android:text="Results could not be loaded"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="18sp"
+        style="@style/Base.Theme.VectoNews"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_error_wifi"
         tools:visibility="visible" />
 
     <TextView
@@ -181,23 +179,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="32dp"
         android:text="No results found for this query"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_error"
+        android:justificationMode="inter_word"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        style="@style/Base.Theme.VectoNews"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
 
-<!--
-    <View
-        android:id="@+id/v_blackScreen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        tools:visibility="gone" />
--->
+    <ImageView
+        android:id="@+id/imageView_error_wifi"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_wifi_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+
 
 
 

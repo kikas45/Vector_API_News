@@ -2,7 +2,9 @@ package com.example.vectonews.ui.sub_main
 
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,24 +14,39 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.vectonews.R
-import com.example.vectonews.api.Source
 import com.example.vectonews.api.UnsplashPhoto
+import com.example.vectonews.comments.CommentFragment
 import com.example.vectonews.databinding.FragmentSavedBinding
 import com.example.vectonews.offlinecenter.SavedDetailAdapter
 import com.example.vectonews.offlinecenter.SavedViewModel
-import com.example.vectonews.searchHistory.User
+import com.example.vectonews.settings.AppSettings
+import com.example.vectonews.signIn.CustomPopupFragment
+import com.example.vectonews.util.Constants
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SavedFragment : Fragment(R.layout.fragment_saved),
-    SavedDetailAdapter.OnItemClickListenerDetails, SavedDetailAdapter.OnItemLongClickListenerSaved {
+    SavedDetailAdapter.OnItemClickListenerDetails, SavedDetailAdapter.OnItemLongClickListenerSaved,
+    SavedDetailAdapter.OnBsClickItemOnSaved {
 
     private val mUserViewModel by viewModels<SavedViewModel>()
 
     private var _binding: FragmentSavedBinding? = null
     private val binding get() = _binding!!
+
+    private val sharedPref: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(Constants.USER_PROFILE, Context.MODE_PRIVATE)
+
+    }
+
+    private lateinit var userId: String
+
+    private lateinit var editor: SharedPreferences.Editor
 
 
     private val handler: Handler by lazy {
@@ -38,8 +55,14 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
 
     private val adapter: SavedDetailAdapter by lazy {
-        SavedDetailAdapter(this, this)
+        SavedDetailAdapter(this, this, this)
     }
+
+    private val sharedHandleSearchNavigation: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(Constants.handleSearchNavigation, Context.MODE_PRIVATE)
+
+    }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,9 +81,23 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
                     requireContext().sendBroadcast(intent)
                 }
 
-                profileImage.setOnClickListener {
-                    Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
 
+                val sharedPref =
+                    requireContext().getSharedPreferences(Constants.USER_PROFILE, Context.MODE_PRIVATE)
+                val image = sharedPref.getString("userImage", "")
+                userId = sharedPref.getString("userId", "")!!
+
+                Glide.with(requireContext())
+                    .load(image)
+                    .centerCrop()
+                    .error(R.drawable.ic_launcher_background)
+                    .into(profileImage)
+
+
+
+                profileImage.setOnClickListener {
+                    val customPopupFragment = CustomPopupFragment()
+                    customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
                 }
 
 
@@ -70,6 +107,8 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
                     val intent = Intent("Main_Home_Fragment")
                     intent.putExtra("Navigation", "Navigate_to_SearchHistoryFragment")
                     requireContext().sendBroadcast(intent)
+
+                    handleSearchNavigation("Major_Home_Fragment")
 
                 }
 
@@ -104,16 +143,22 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
     private fun fectdatafromRoomBase() {
         mUserViewModel.allNotes.observe(viewLifecycleOwner, Observer {
-            adapter.setData(it)
+
+            if (it.isEmpty()) {
+                binding.textViewEmpty.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+            } else {
+                binding.textViewEmpty.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+                adapter.setData(it)
+            }
+
+
         })
 
 
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 
@@ -121,26 +166,34 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
         super.onResume()
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                //  view?.findNavController()?.popBackStack(R.id.galleryFragment, false)
+                view?.findNavController()?.popBackStack(R.id.gallaryFragment, false)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
     }
 
+
+    //for details Fragments
     override fun onclickDetailsItem(photo: UnsplashPhoto) {
-        val bundle = Bundle().apply {
 
-            putString("title", photo.title.toString())
-            putString("url", photo.url.toString())
-            putString("urlToImage", photo.urlToImage.toString())
-        }
+        val getUrl = photo.url.toString()
+        val titles = photo.title.toString()
 
-        //  view?.findNavController()?.navigate(R.id.action_savedFragment_to_detailsFragment, bundle)
+        val artcileId = photo.publishedAt.toString()
+        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+
+        val intent = Intent("Main_Home_Fragment")
+        intent.putExtra("Navigation", "Navigate_To_Detail_Fragment")
+        intent.putExtra("titles", titles)
+        intent.putExtra("getUrl", getUrl)
+        requireContext().sendBroadcast(intent)
+
+
+
 
     }
 
     override fun onItemLongClickedSaved(photo: UnsplashPhoto) {
-
         deleteAllUsers(photo)
     }
 
@@ -148,6 +201,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        _binding = null
     }
 
     private fun deleteAllUsers(photo: UnsplashPhoto) {
@@ -161,11 +215,32 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
             ).show()
         }
         builder.setNegativeButton("No") { _, _ -> }
-        builder.setTitle("Delete everything?")
-        builder.setMessage("Are you sure you want to delete everything?")
+        builder.setTitle("Delete News Article?")
         builder.create().show()
     }
 
+    override fun onItemBsSaved(photo: UnsplashPhoto) {
+        val artcileId = photo.publishedAt.toString()
+        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+        val customPopupFragment = CommentFragment()
+        customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
+
+
+    }
+
+    private fun saveUserProfilesAndNewsArticleId(newsArticleId: String, whatFragment:String) {
+
+        editor = sharedPref.edit()
+        editor.putString("newsArticleId", newsArticleId)
+        editor.putString("WhatFragment", whatFragment)
+        editor.apply()
+    }
+
+    private fun handleSearchNavigation(handleSearchNavigation:String) {
+        editor = sharedHandleSearchNavigation.edit()
+        editor.putString("handleSearchNavigation", handleSearchNavigation)
+        editor.apply()
+    }
 
 
 }

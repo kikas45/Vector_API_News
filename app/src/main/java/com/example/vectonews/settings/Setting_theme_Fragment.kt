@@ -33,7 +33,7 @@ class Setting_theme_Fragment : Fragment(R.layout.fragment_setting_theme) {
     }
 
     private fun initView() {
-        when (settings!!.getTheme()) {
+        when (settings.getTheme()) {
             AppSettings.THEME_LIGHT -> binding.rgTheme.isChecked = false
             AppSettings.THEME_DARK -> binding.rgTheme.isChecked = true
             else -> binding.rgTheme.isChecked = false
@@ -41,9 +41,9 @@ class Setting_theme_Fragment : Fragment(R.layout.fragment_setting_theme) {
         binding.rgTheme.setOnCheckedChangeListener { compoundButton, isValued -> // we are putting the values into SHARED PREFERENCE
             // this avlues are int 0 or 1
             if (compoundButton.isChecked) {
-                settings!!.setTheme(AppSettings.THEME_DARK)
+                settings.setTheme(AppSettings.THEME_DARK)
             } else {
-                settings!!.setTheme(AppSettings.THEME_LIGHT)
+                settings.setTheme(AppSettings.THEME_LIGHT)
             }
 
 

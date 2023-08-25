@@ -26,7 +26,7 @@ interface UserDao {
     @Query("SELECT * FROM user_table  ORDER BY firstName DESC")
     fun readAllData(): LiveData<List<User>>
 
-    @Query("DELETE FROM user_table WHERE firstName NOT IN (SELECT firstName FROM user_table ORDER BY firstName DESC LIMIT 2)")
+    @Query("DELETE FROM user_table WHERE firstName NOT IN (SELECT firstName FROM user_table ORDER BY firstName DESC LIMIT 50)")
     fun deleteExcessItems()
 
 }

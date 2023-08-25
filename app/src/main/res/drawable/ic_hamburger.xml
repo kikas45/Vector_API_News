@@ -4,7 +4,7 @@
     android:autoMirrored="true"
     android:alpha="1"
     android:tintMode="src_in"
-    android:tint="#000000"
+    android:tint="?attr/colorControlNormal"
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "651655503506",
+    "firebase_url": "https://vector-news-b5fcf-default-rtdb.firebaseio.com",
+    "project_id": "vector-news-b5fcf",
+    "storage_bucket": "vector-news-b5fcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651655503506:android:f385df597047fefe8f104b",
+        "android_client_info": {
+          "package_name": "com.example.vectonews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651655503506-9gqtajp4bmrgvjkq6ui9ki3eqjosft9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vectonews",
+            "certificate_hash": "6a680bc7b917b055fec19bd561ba12f16e043035"
+          }
+        },
+        {
+          "client_id": "651655503506-blsh050smqcdomu5dsnkrbggmsg4khhg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTGpWf19IuOzWFA1nZcfQLcLYGQ55CW6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651655503506-1flgnscbs82pauell9u52nu351gvcshu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,6 +11,7 @@ private const val UNSPLASH_STARTING_PAGE_INDEX = 1
 
 class UnsplashPagingSource(
     private val unsplashApi: UnsplashApi,
+    private val apiKey: String,
     private val query: String,
     private val country: String,
     private val category: String
@@ -20,7 +21,7 @@ class UnsplashPagingSource(
         val position = params.key ?: UNSPLASH_STARTING_PAGE_INDEX
 
         return try {
-            val response = unsplashApi.searchPhotos(country, category, query, position, params.loadSize)
+            val response = unsplashApi.getRequstNews(apiKey,country, category, query, position, params.loadSize)
             val photos = response.articles
 
             LoadResult.Page(

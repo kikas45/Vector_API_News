@@ -9,6 +9,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="simplegray">#E8EDFA</color>
 
     <color name="black_shade_1">#2E2E2E</color>
     <color name="deem_shade">#E2E6DE</color>
@@ -16,10 +17,11 @@
 
     <color name="black_gray_1">#1E1D1D</color>
 
+
     <color name="whiteAlpah">#10FFFFFF</color>
 
     <color name="bottomNav_light">#E8EDFA</color>
     <color name="dark_bottom_nav">#2E2E2E</color>
-
+    <color name="bottom_nav_light">#E8EDFA</color>
 
 </resources>

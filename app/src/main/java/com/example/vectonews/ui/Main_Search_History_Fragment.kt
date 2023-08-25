@@ -3,6 +3,7 @@ package com.example.vectonews.ui
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -23,15 +25,14 @@ import com.example.vectonews.databinding.FragmentSearchHistoryBinding
 import com.example.vectonews.searchHistory.User
 import com.example.vectonews.searchHistory.UserViewModel
 import com.example.vectonews.settings.AppSettings
-import com.example.vectonews.ui.searchFragment.ListAdapter
+import com.example.vectonews.ui.searchFragment.HistorySearchAdapter
+import com.example.vectonews.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
-    ListAdapter.OnItemClickListener, ListAdapter.OnItemLongClickListener {
+    HistorySearchAdapter.OnItemClickListener, HistorySearchAdapter.OnItemLongClickListener {
 
-
-    private var CHECK_IF_EXIST = "CHECK_MY_STATE_OF_SEARCH"
 
     private val mUserViewModel by viewModels<UserViewModel>()
 
@@ -42,13 +43,29 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
         AppSettings(requireContext().applicationContext)
     }
 
+    private val sharedDatasss: SharedPreferences by lazy { requireContext().getSharedPreferences(
+            Constants.CHECK_IF_EXIST,
+            Context.MODE_PRIVATE
+        )
+
+    }
+
+
+    private val sharedHandleSearchNavigation: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(Constants.handleSearchNavigation, Context.MODE_PRIVATE)
+
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchHistoryBinding.bind(view)
+
         showKeyBoard()
 
-
+        val editor = sharedDatasss.edit()
+        editor.clear()
+        editor.apply()
 
         changeToolabrColor()
 
@@ -57,12 +74,20 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
             hideKeyBaord()
         }
 
-        DisplayMySearch()
+        DisplaySearchHistory()
 
         binding.apply {
 
             btnBackPressed.setOnClickListener {
-                findNavController().popBackStack(R.id.main_Home_Fragment, false)
+                val previous_Fragment = sharedHandleSearchNavigation.getString("handleSearchNavigation", "")
+                if (previous_Fragment.equals("Major_Home_Fragment")){
+                    findNavController().popBackStack(R.id.main_Home_Fragment, false)
+                }else{
+                    findNavController().popBackStack(R.id.searchFragment, false)
+                    editor.putString("search_Check", "SavedData")
+                    editor.apply()
+                }
+
                 hideKeyBaord()
 
 
@@ -70,14 +95,6 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
 
 
             val bundle = Bundle()
-
-
-            val sharedDatasss = view.context.applicationContext.getSharedPreferences(
-                CHECK_IF_EXIST,
-                Context.MODE_PRIVATE
-            )
-
-            val editor = sharedDatasss.edit()
 
             editText.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -88,13 +105,10 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
                         insertDataToDatabase(editUrl)
                         mUserViewModel.deleteExcessItems()
                         bundle.putString("search", editUrl)
-                        editor.putString("search", "SavedData")
-                        editor.apply()
-                        //  view.findNavController().navigate(R.id.action_searchHistoryFragment_to_searchFragment, bundle)
-                        view.findNavController().popBackStack(R.id.main_Home_Fragment, false)
+                        view.findNavController().navigate(R.id.action_main_Save_Fragment_to_searchFragment, bundle)
 
                     } else {
-                        Toast.makeText(context, "Input text for search", Toast.LENGTH_SHORT).show()
+                        showToast("Input text for search")
                     }
                     return@OnEditorActionListener true
                 }
@@ -165,15 +179,15 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
 
     private fun insertDataToDatabase(name: String) {
 
-        val user = User( name)
+        val user = User(name)
         mUserViewModel.addUser(user)
 
     }
 
 
-    private fun DisplayMySearch() {
+    private fun DisplaySearchHistory() {
         // Recyclerview
-        val adapter = ListAdapter(this, this)
+        val adapter = HistorySearchAdapter(this, this)
 
 
         binding.apply {
@@ -184,6 +198,13 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
         // UserViewModel
         mUserViewModel.readAllData.observe(viewLifecycleOwner, Observer { user ->
             adapter.setData(user)
+            if (user.isEmpty()) {
+                binding.textDeleteall.visibility = View.INVISIBLE
+                binding.textView2.visibility = View.INVISIBLE
+            } else {
+                binding.textDeleteall.visibility = View.VISIBLE
+                binding.textView2.visibility = View.VISIBLE
+            }
 
         })
 
@@ -207,12 +228,8 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
             mUserViewModel.deleteUser(photo)
-            Toast.makeText(
-                requireContext(),
-                "Successfully removed: ${photo.firstName.toString()}",
-                Toast.LENGTH_SHORT
-            ).show()
 
+            showToast("Successfully removed: ${photo.firstName.toString()}")
         }
         builder.setNegativeButton("No") { _, _ -> }
         builder.setTitle("Delete ${photo.firstName.toString()}?")
@@ -239,21 +256,32 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
 
     override fun onItemClicked(_user: User) {
         val name = _user.firstName.toString()
-
-        val sharedDatasss = view?.context?.applicationContext?.getSharedPreferences(
-            CHECK_IF_EXIST,
-            Context.MODE_PRIVATE
-        )
-        val editor = sharedDatasss?.edit()
-
         val bundle = Bundle().apply { putString("search", name) }
-
-        editor?.putString("search", "SavedData")
-        editor?.apply()
-
-        //   view?.findNavController()?.navigate(R.id.action_searchHistoryFragment_to_searchFragment, bundle)
-
+        findNavController().navigate(R.id.action_main_Save_Fragment_to_searchFragment, bundle)
         hideKeyBaord()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+                val previous_Fragment = sharedHandleSearchNavigation.getString("handleSearchNavigation", "")
+
+                if (previous_Fragment.equals("Major_Home_Fragment")){
+                    findNavController().popBackStack(R.id.main_Home_Fragment, false)
+                }else{
+                    findNavController().popBackStack(R.id.searchFragment, false)
+                    val editor = sharedDatasss.edit()
+                    editor.putString("search_Check", "SavedData")
+                    editor.apply()
+                }
+
+                hideKeyBaord()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
     }
 
     override fun onDestroy() {
@@ -264,5 +292,11 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
         }
     }
 
+    private fun showToast(message: String) {
+        try {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        } catch (ignored: Exception) {
+        }
+    }
 
 }

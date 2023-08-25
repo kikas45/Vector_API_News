@@ -11,29 +11,30 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.vectonews.R
 import com.example.vectonews.api.Source
 import com.example.vectonews.api.UnsplashPhoto
+import com.example.vectonews.comments.CommentFragment
 import com.example.vectonews.databinding.FragmentGalleryBinding
 import com.example.vectonews.offlinecenter.SavedViewModel
+import com.example.vectonews.settings.AppSettings
+import com.example.vectonews.signIn.CustomPopupFragment
+import com.example.vectonews.util.Constants
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemClickListenerMe,
+    NewsAdapter.OnBsClickItem,
     NewsAdapter.OnShortClickedAddItem {
 
 
@@ -47,19 +48,43 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     private var _binding: FragmentGalleryBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var userId: String
+
     private val adapter: NewsAdapter by lazy {
-        NewsAdapter(this, this, mUserViewModel, viewLifecycleOwner)
+        NewsAdapter(
+            this, this, this, mUserViewModel, viewLifecycleOwner
+        )
     }
 
     private val sharedDass: SharedPreferences by lazy {
         requireContext().applicationContext.getSharedPreferences(
-            "PASS_DATA_TRANS_FRAGMENT",
+            Constants.CHECK_IF_CHIP_VALUE_EXIST_OR_NOT,
             Context.MODE_PRIVATE
         )
     }
 
     private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
+    }
+
+    private val sharedPref: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(Constants.USER_PROFILE, Context.MODE_PRIVATE)
+
+    }
+
+
+    private val sharedHandleSearchNavigation: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            Constants.handleSearchNavigation,
+            Context.MODE_PRIVATE
+        )
+
+    }
+
+    private lateinit var editor: SharedPreferences.Editor
+
+    private val settings: AppSettings by lazy {
+        AppSettings(requireContext())
     }
 
 
@@ -72,24 +97,40 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         requireContext().registerReceiver(broadcastReceiver, filter)
 
 
+
         binding.apply {
             hamburger.setOnClickListener {
                 val intent = Intent("MainActivity")
                 requireContext().sendBroadcast(intent)
             }
 
+            val sharedPref =
+                requireContext().getSharedPreferences(Constants.USER_PROFILE, Context.MODE_PRIVATE)
+            val image = sharedPref.getString("userImage", "")
+            userId = sharedPref.getString("userId", "")!!
+
+
             profileImage.setOnClickListener {
-                Toast.makeText(requireContext(), "Pending", Toast.LENGTH_SHORT).show()
-
-                ///  savedToDatabase("titles", "getUrl", "urlToImage")
-
+                val customPopupFragment = CustomPopupFragment()
+                customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
             }
 
 
+
+
+            Glide.with(requireContext())
+                .load(image)
+                .centerCrop()
+                .error(R.drawable.ic_launcher_background)
+                .into(profileImage)
+
+
             textsearch.setOnClickListener {
-                val intent = Intent("Main_Home_Fragment")
+                val intent = Intent(Constants.Main_Home_Fragment)
                 intent.putExtra("Navigation", "Navigate_to_SearchHistoryFragment")
                 requireContext().sendBroadcast(intent)
+
+                handleSearchNavigation("Major_Home_Fragment")
 
             }
 
@@ -97,17 +138,6 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
 
         val editor = sharedDass.edit()
-        val urlData = sharedDass.getString("search", "")
-
-        if (urlData != "SavedData") {
-
-            // Note : a default value is already passed , but we will
-            // need this when trying to pass and remember other arguments
-            //   viewModel.updateCountry("us")
-            //  viewModel.updateCategory("")
-
-        }
-
 
         binding.apply {
             try {
@@ -120,7 +150,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                     header = NewsLoadStateAdapter { adapter.retry() },
                     footer = NewsLoadStateAdapter { adapter.retry() }
                 )
-            //    adapter.observeSavedStatus(viewLifecycleOwner)
+                //    adapter.observeSavedStatus(viewLifecycleOwner)
 
 
             } catch (_: Exception) {
@@ -135,6 +165,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         }
 
 
+
+
         makeAPIRequest()
 
 
@@ -144,6 +176,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                     progressBar.isVisible = loadState.source.refresh is LoadState.Loading
                     recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
                     textViewError.isVisible = loadState.source.refresh is LoadState.Error
+                    imageViewErrorWifi.isVisible = loadState.source.refresh is LoadState.Error
+
 
                     if (loadState.source.refresh is LoadState.Error) {
                         attemptRequestAgain(seconds)
@@ -164,6 +198,11 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                     ) {
                         recyclerView.isVisible = false
                         textViewEmpty.isVisible = true
+                        editor.clear()
+                        editor.apply()
+                        makeAPIRequest()
+                        countdownTimer.cancel()
+
                     } else {
                         textViewEmpty.isVisible = false
                     }
@@ -200,14 +239,19 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     }
 
 
+    // for etails frgaments
     override fun onItemClickedMe(photo: UnsplashPhoto) {
 
         val getUrl = photo.url.toString()
         val titles = photo.title.toString()
 
-        val intent = Intent("Main_Home_Fragment")
-        intent.putExtra("Navigation", getUrl)
+        val artcileId = photo.publishedAt.toString()
+        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+
+        val intent = Intent(Constants.Main_Home_Fragment)
+        intent.putExtra("Navigation", "Navigate_To_Detail_Fragment")
         intent.putExtra("titles", titles)
+        intent.putExtra("getUrl", getUrl)
         requireContext().sendBroadcast(intent)
 
     }
@@ -247,7 +291,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
                 try {
                     binding.textViewError.text =
-                        "Something went wrong, unable retrieve data...\nTrying again in: ${millisUntilFinished / 1000}"
+                        "Something went wrong, unable retrieve data, Please Check Internet Connectivity...\nAuto try in: ${millisUntilFinished / 1000}"
 
                 } catch (_: Exception) {
                 }
@@ -257,14 +301,19 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     }
 
     private fun makeAPIRequest() {
-        // viewModel.updateCountry("ng")
-//
-        viewModel.photos.observe(viewLifecycleOwner) {
-            adapter.submitData(viewLifecycleOwner.lifecycle, it)
+
+        val urlData = sharedDass.getString("search", "")
+
+        if (urlData != "SavedData") {
+            getSelectedCountry().let {
+                viewModel.updateCountry(it)
+            }
         }
 
 
-
+        viewModel.photos.observe(viewLifecycleOwner) {
+            adapter.submitData(viewLifecycleOwner.lifecycle, it)
+        }
 
 
     }
@@ -277,6 +326,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                 newCountry?.let {
                     binding.progressBar.isVisible = true
                     binding.textViewError.isVisible = false
+                    binding.imageViewErrorWifi.isVisible = false
                     binding.recyclerView.isVisible = false
                     handler.postDelayed(Runnable {
                         viewModel.updateCountry(it)
@@ -288,6 +338,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
                 newCategory?.let {
                     binding.progressBar.isVisible = true
                     binding.textViewError.isVisible = false
+                    binding.imageViewErrorWifi.isVisible = false
                     binding.recyclerView.isVisible = false
                     handler.postDelayed(Runnable {
                         viewModel.updateCategory(it)
@@ -328,14 +379,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         photo.isSaved = false
         mUserViewModel.delete(photo)
 
-        Snackbar.make(binding.recyclerView, "Article Removed Successfully", Snackbar.LENGTH_SHORT)
-            .setAction("Undo", View.OnClickListener {
-                savedToDatabase(photo)
-            })
-            .setActionTextColor(resources.getColor(R.color.red_color))
-
-
-            .show()
+        showSnackbar_Flaged_Report("Article Removed Successfully", photo)
 
 
     }
@@ -353,11 +397,106 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         val artciles = UnsplashPhoto(titles, getUrl, urlToImage, _userName, date)
         mUserViewModel.insert(artciles)
 
-        Snackbar.make(binding.recyclerView, "Article Saved Successfully", Snackbar.LENGTH_SHORT)
-            .show()
+
+        showSnackbar_show_simple("Article Saved Successfully")
+
 
     }
 
+
+    // for comment frgament
+    override fun onBsItem(photo: UnsplashPhoto) {
+
+        val artcileId = photo.publishedAt.toString()
+        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+        val customPopupFragment = CommentFragment()
+        customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
+
+    }
+
+
+// we pass article id to bottomsheet comment
+
+    private fun saveUserProfilesAndNewsArticleId(newsArticleId: String, whatFragment: String) {
+
+        editor = sharedPref.edit()
+        editor.putString("newsArticleId", newsArticleId)
+        editor.putString("WhatFragment", whatFragment)
+        editor.apply()
+    }
+
+
+    private fun handleSearchNavigation(handleSearchNavigation: String) {
+        editor = sharedHandleSearchNavigation.edit()
+        editor.putString("handleSearchNavigation", handleSearchNavigation)
+        editor.apply()
+    }
+
+
+    private fun getSelectedCountry(): String {
+        val sharedPref = requireContext().getSharedPreferences(
+            Constants.search_Query_Shared_Prefs,
+            Context.MODE_PRIVATE
+        )
+        return sharedPref.getString("selected_country", "us") ?: "us"
+    }
+
+    private fun showSnackbar_Flaged_Report(text: String, photo: UnsplashPhoto) {
+
+        if (settings.getTheme() == AppSettings.THEME_LIGHT) {
+
+            val snackbar = Snackbar.make(binding.recyclerView, text, 3000)
+
+            snackbar.setTextColor(requireContext().resources.getColor(R.color.black))
+            snackbar.setBackgroundTint(requireContext().resources.getColor(R.color.white))
+            snackbar.setActionTextColor(requireContext().resources.getColor(R.color.black))
+            snackbar.setAction(
+                "UNDO"
+            ) { view ->
+                savedToDatabase(photo)
+            }
+            snackbar.show()
+
+        } else {
+            val snackbar = Snackbar.make(binding.recyclerView, text, 3000)
+            snackbar.setTextColor(requireContext().resources.getColor(R.color.white))
+            snackbar.setBackgroundTint(requireContext().resources.getColor(R.color.black))
+            snackbar.setActionTextColor(requireContext().resources.getColor(R.color.white))
+            snackbar.setAction(
+                "UNDO"
+            ) { view ->
+                savedToDatabase(photo)
+            }
+            snackbar.show()
+
+        }
+
+
+    }
+
+
+    private fun showSnackbar_show_simple(text: String) {
+
+        if (settings.getTheme() == AppSettings.THEME_LIGHT) {
+
+            val snackbar = Snackbar.make(binding.recyclerView, text, 3000)
+
+            snackbar.setTextColor(requireContext().resources.getColor(R.color.black))
+            snackbar.setBackgroundTint(requireContext().resources.getColor(R.color.white))
+            snackbar.setActionTextColor(requireContext().resources.getColor(R.color.black))
+            snackbar.show()
+
+        } else {
+            val snackbar = Snackbar.make(binding.recyclerView, text, 3000)
+            snackbar.setTextColor(requireContext().resources.getColor(R.color.white))
+            snackbar.setBackgroundTint(requireContext().resources.getColor(R.color.black))
+            snackbar.setActionTextColor(requireContext().resources.getColor(R.color.white))
+            snackbar.show()
+
+        }
+
+
+    }
 
 
 }

@@ -16,7 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.VectoNews"
         tools:targetApi="31">
-
+        <activity
+            android:name="com.example.sigup.LoginActivty"
+            android:exported="false" />
+        <activity
+            android:name="com.example.sigup.HomeActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

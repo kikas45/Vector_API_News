@@ -3,10 +3,7 @@ package com.example.vectonews.ui.sub_main
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +18,9 @@ import com.example.vectonews.offlinecenter.SavedViewModel
 class NewsAdapter(
     private val listener: OnItemClickListenerMe,
     private val shortListner: OnShortClickedAddItem,
+    private val openBsListner: OnBsClickItem,
     private val savedViewModel: SavedViewModel,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
 ) :
     PagingDataAdapter<UnsplashPhoto, NewsAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
 
@@ -39,7 +37,7 @@ class NewsAdapter(
         if (currentItem != null) {
             holder.bind(currentItem)
 
-            if (currentItem.isSaved){
+            if (currentItem.isSaved) {
                 holder.updateBookmarkIcon(currentItem.isSaved)
             }
 
@@ -52,8 +50,6 @@ class NewsAdapter(
         }
 
 
-
-
     }
 
     interface OnItemClickListenerMe {
@@ -62,6 +58,10 @@ class NewsAdapter(
 
     interface OnShortClickedAddItem {
         fun onITemShortAdded(photo: UnsplashPhoto)
+    }
+
+    interface OnBsClickItem {
+        fun onBsItem(photo: UnsplashPhoto)
     }
 
 
@@ -83,7 +83,6 @@ class NewsAdapter(
 
 
 
-
             binding.imageViewBookmark.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -99,8 +98,22 @@ class NewsAdapter(
 
             }
 
-        }
 
+            binding.imageView4.setOnClickListener {
+
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    if (item != null) {
+                        openBsListner.onBsItem(item)
+                    }
+
+                }
+
+            }
+
+
+        }
 
 
         @SuppressLint("SetTextI18n")
@@ -117,7 +130,7 @@ class NewsAdapter(
                 val surce = photo.source.name
                 val date = photo.publishedAt
                 textSourceName.text = surce + " :: " + date
-               // updateBookmarkIcon(photo.isSaved)
+                // updateBookmarkIcon(photo.isSaved)
             }
         }
 
@@ -134,8 +147,6 @@ class NewsAdapter(
 
 
     }
-
-
 
 
     companion object {

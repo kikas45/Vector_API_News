@@ -9,15 +9,22 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.vectonews.R
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.CustomSavedRowBinding
+import com.example.vectonews.ui.sub_main.NewsAdapter
 
-class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, private val onLongListener:OnItemLongClickListenerSaved): RecyclerView.Adapter<SavedDetailAdapter.MyViewHolder>() {
+class SavedDetailAdapter(
+    private val listener: OnItemClickListenerDetails,
+    private val onLongListener: OnItemLongClickListenerSaved,
+    private val OnBsItemSaved: OnBsClickItemOnSaved,
+) : RecyclerView.Adapter<SavedDetailAdapter.MyViewHolder>() {
 
 
     private var userList = emptyList<UnsplashPhoto>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = CustomSavedRowBinding.bind( LayoutInflater.from(parent.context).inflate(R.layout.custom_saved_row, parent, false))
+        val binding = CustomSavedRowBinding.bind(
+            LayoutInflater.from(parent.context).inflate(R.layout.custom_saved_row, parent, false)
+        )
 
         return MyViewHolder(binding)
     }
@@ -30,21 +37,38 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
     interface OnItemLongClickListenerSaved {
         fun onItemLongClickedSaved(photo: UnsplashPhoto)
     }
+    interface OnBsClickItemOnSaved {
+        fun onItemBsSaved(photo: UnsplashPhoto)
+    }
 
     inner class MyViewHolder(private val binding: CustomSavedRowBinding) :
-        RecyclerView.ViewHolder(binding.root){
+        RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     val item = userList[position]
-                    if (item != null){
+                    if (item != null) {
                         listener.onclickDetailsItem(item)
+
                     }
                 }
 
             }
+
+        binding.imageView4.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = userList[position]
+                    if (item != null) {
+                        OnBsItemSaved.onItemBsSaved(item)
+                    }
+                }
+
+            }
+
+
 
 
             binding.root.setOnLongClickListener {
@@ -60,8 +84,6 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
             }
 
         }
-
-
 
 
         @SuppressLint("SetTextI18n")
@@ -80,8 +102,7 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
                 textSourceName.text = surce + " :: " + date
             }
         }
-        }
-
+    }
 
 
     override fun getItemCount(): Int {
@@ -97,12 +118,11 @@ class SavedDetailAdapter(private val listener:OnItemClickListenerDetails, privat
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(user: List<UnsplashPhoto>){
+    fun setData(user: List<UnsplashPhoto>) {
         this.userList = user
         notifyDataSetChanged()
 
     }
-
 
 
 }

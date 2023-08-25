@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:cardCornerRadius="10dp"
+    android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="10dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
         <ImageView
             android:id="@+id/image_view"
@@ -21,17 +22,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/backgrounds/scenic"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/imageViewTV"
+            style="@style/unsplashtsyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/unsplashtsyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" >
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/text_view_title"
@@ -73,11 +74,12 @@
                 style="@style/Base.Theme.VectoNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="-6dp"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-condensed"
+                android:maxLines="1"
                 android:text="Google News  Published on ; 20/2023"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/text_view_title"
@@ -87,9 +89,10 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="34dp"
+                android:layout_width="70dp"
                 android:layout_height="34dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="-16dp"
+                android:layout_marginTop="4dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:selectableItemBackgroundBorderless"
