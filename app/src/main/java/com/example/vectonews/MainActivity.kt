@@ -28,6 +28,7 @@ import com.example.vectonews.updates.AppUpdateViewModel
 import com.example.vectonews.util.Constants
 import com.google.android.material.chip.Chip
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -69,6 +70,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setTheme(R.style.Base_Theme_VectoNews)
         supportActionBar?.hide()
+
+
+        val mFirebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        mFirebaseAnalytics.setAnalyticsCollectionEnabled(true)
 
 
         app_update_statues()
@@ -312,10 +317,10 @@ class MainActivity : AppCompatActivity() {
                     app_date = dateFormat.parse(my_app_date)
 
                     if (response.version == null && !doNotShowAgain) {
-                        showPopup(response.date_publish.toString(), response.url.toString())
+                        showPopup(""+response.date_publish, ""+response.url)
                     } else if (currentDate.compareTo(app_date) > 0) {
 
-                        final_showPopup(response.date_publish.toString(), response.url.toString())
+                        final_showPopup(""+ response.date_publish, ""+response.url)
 
                     }
 

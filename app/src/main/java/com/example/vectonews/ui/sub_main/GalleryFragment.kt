@@ -81,6 +81,17 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
     }
 
+
+
+    private val sharedPrefPassDataToDetailsFragment: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            Constants.PASS_DATA_TO_DETAIL_FRAGMENT,
+            Context.MODE_PRIVATE
+        )
+
+    }
+
+
     private lateinit var editor: SharedPreferences.Editor
 
     private val settings: AppSettings by lazy {
@@ -242,17 +253,20 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     // for etails frgaments
     override fun onItemClickedMe(photo: UnsplashPhoto) {
 
-        val getUrl = photo.url.toString()
-        val titles = photo.title.toString()
+        val getUrl ="" +photo.url
+        val titles = "" + photo.title
+        val urlToImage ="" +  photo.urlToImage
+        val name = "" + photo.source.name
+        val publishedAt ="" +  photo.publishedAt
 
-        val artcileId = photo.publishedAt.toString()
+        val artcileId ="" +  photo.publishedAt
         saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
 
         val intent = Intent(Constants.Main_Home_Fragment)
         intent.putExtra("Navigation", "Navigate_To_Detail_Fragment")
-        intent.putExtra("titles", titles)
-        intent.putExtra("getUrl", getUrl)
         requireContext().sendBroadcast(intent)
+
+        sharedPrefPassDataToDetailsFragment(titles, getUrl, urlToImage, name, publishedAt )
 
     }
 
@@ -385,13 +399,14 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     }
 
     private fun savedToDatabase(photo: UnsplashPhoto) {
+
         photo.isSaved = true
 
-        val titles = photo.title.toString()
-        val getUrl = photo.url.toString()
-        val urlToImage = photo.urlToImage.toString()
-        val name = photo.source.name.toString()
-        val date = photo.publishedAt.toString()
+        val titles = "" + photo.title
+        val getUrl = "" +  photo.url
+        val urlToImage = "" +  photo.urlToImage
+        val name = "" +  photo.source.name
+        val date = "" +  photo.publishedAt
 
         val _userName = Source("", name)
         val artciles = UnsplashPhoto(titles, getUrl, urlToImage, _userName, date)
@@ -407,7 +422,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     // for comment frgament
     override fun onBsItem(photo: UnsplashPhoto) {
 
-        val artcileId = photo.publishedAt.toString()
+        val artcileId = "" + photo.publishedAt
         saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
         val customPopupFragment = CommentFragment()
         customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
@@ -494,6 +509,20 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
             snackbar.show()
 
         }
+
+
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    fun sharedPrefPassDataToDetailsFragment(titles:String, getUrl:String, urlToImage:String, name:String, date:String){
+        val editor = sharedPrefPassDataToDetailsFragment.edit()
+        editor.putString("titles", titles)
+        editor.putString("getUrl", getUrl)
+        editor.putString("urlToImage", urlToImage)
+        editor.putString("name", name)
+        editor.putString("date", date)
+        editor.apply()
+
 
 
     }

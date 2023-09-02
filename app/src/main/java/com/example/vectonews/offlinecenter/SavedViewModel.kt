@@ -35,13 +35,6 @@ class SavedViewModel  @Inject constructor(private val noteRepository: SavedRepos
     }
 
 
-    fun toggleSavedStatus(savedModel: UnsplashPhoto) {
-        viewModelScope.launch {
-            val updatedModel = savedModel.copy(isSaved = !savedModel.isSaved)
-            noteRepository.update(updatedModel)
-        }
-    }
-
 
 
 }

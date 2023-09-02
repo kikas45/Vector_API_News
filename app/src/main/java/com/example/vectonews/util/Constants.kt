@@ -13,6 +13,8 @@ class Constants {
 
         const val Main_Home_Fragment = "Main_Home_Fragment"
 
+        const val PASS_DATA_TO_DETAIL_FRAGMENT = "PASS_DATA_TO_DETAIL_FRAGMENT"
+
         const val commentKey = "commentKey"
         const val commentsArticles = "AllCommentsArticles"
 

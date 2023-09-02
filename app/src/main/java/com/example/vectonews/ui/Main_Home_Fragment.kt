@@ -3,16 +3,12 @@ package com.example.vectonews.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
@@ -21,12 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.signIn.GoogleSignInViewModel
-import com.example.vectonews.MainActivity
 import com.example.vectonews.R
-import com.example.vectonews.databinding.FragmentMainHomeBinding
 import com.example.vectonews.settings.AppSettings
 import com.example.vectonews.util.Constants
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -36,17 +29,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.math.log
 
 @AndroidEntryPoint
 class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
@@ -70,7 +59,6 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         requireContext().getSharedPreferences(Constants.USER_PROFILE, Context.MODE_PRIVATE)
 
     }
-
 
 
     private lateinit var googlesignInClient: GoogleSignInClient
@@ -114,27 +102,15 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         override fun onReceive(context: Context, intent: Intent) {
             val navControl = getNavController(context)
 
-            val newCountry = intent.getStringExtra("Navigation")
-            val titles = intent.getStringExtra("titles") // for web view
-            val getUrl = intent.getStringExtra("getUrl") // for web view
+            val getNavigation = intent.getStringExtra("Navigation")
 
-            if (newCountry.equals("Navigate_to_SearchHistoryFragment")) {
+            if (getNavigation.equals("signWithGoogle")) {
                 try {
-                    navControl.navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
-                } catch (_: Exception) {
-                }
-            } else if (newCountry.equals("Navigate_To_Detail_Fragment_From_Search_Fragment")) {
-                try {
-                    val bundle = Bundle().apply {
-                        putString("urls_webView", getUrl.toString())
-                        putString("titles", titles.toString()) // for web view
-                    }
-
-                    navControl.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
+                    signinWithGoogle()
                 } catch (_: Exception) {
                 }
 
-            } else if (newCountry.equals("signOutWithGoogle")) {
+            } else if (getNavigation.equals("signOutWithGoogle")) {
 
                 try {
                     googlesignInClient.signOut().addOnCompleteListener {
@@ -146,21 +122,18 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
                 }
 
 
-            } else if (newCountry.equals("signWithGoogle")) {
-              try {
-                signinWithGoogle()
-              } catch (_: Exception) { }
-
-            } else {
-
-                val bundle = Bundle().apply {
-
-                    putString("urls_webView", getUrl.toString())
-                    putString("titles", titles.toString()) // for web view
-
+            } else if (getNavigation.equals("Navigate_to_SearchHistoryFragment")) {
+                try {
+                    navControl.navigate(R.id.action_main_Home_Fragment_to_main_Save_Fragment)
+                } catch (_: Exception) {
                 }
+            } else {
+                try {
 
-                navControl.navigate(R.id.action_main_Home_Fragment_to_detailFragment, bundle)
+                    navControl.navigate(R.id.action_main_Home_Fragment_to_detailFragment)
+
+                } catch (_: Exception) {
+                }
             }
         }
 
@@ -208,10 +181,11 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
             if (result.resultCode == Activity.RESULT_OK) {
-                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val task: Task<GoogleSignInAccount> =
+                    GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 googleSignInViewModel.handleGoogleSignInResult(task)
 
-                if (task.isSuccessful){
+                if (task.isSuccessful) {
                     showToast("Account Created")
                 }
             }
@@ -232,11 +206,11 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         val dataRef = database.reference.child(commentKey)
 
 
-         val thirtySecondsAgo = System.currentTimeMillis() - 30000
+      //  val thirtySecondsAgo = System.currentTimeMillis() - 30000
 
-       //  val twoDaysAgo = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000
+          val twoDaysAgo = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000
 
-      //  val thirtyMinutesAgo = System.currentTimeMillis() - 30 * 60 * 1000
+        //  val thirtyMinutesAgo = System.currentTimeMillis() - 30 * 60 * 1000
 
         dataRef.addListenerForSingleValueEvent(object : ValueEventListener {
             @SuppressLint("SetTextI18n")
@@ -247,8 +221,8 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
                     if (createdAt != null) {
                         val createdAtMillis = convertTimestampToMillis(createdAt)
-                        if (createdAtMillis < thirtySecondsAgo) {
-                            deleteMyNewsArticles(articleId.toString())
+                        if (createdAtMillis < twoDaysAgo) {
+                            deleteMyNewsArticles(articleId + "")
 
                             childSnapshot.ref.removeValue()
 
@@ -276,7 +250,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
         val dataRef = database.reference.child(commentsArticles)
         dataRef.child(articleId).removeValue().addOnCompleteListener {
             if (it.isSuccessful) {
-                showToast("Deleted Successfully")
+               // showToast("Deleted Successfully")
             }
         }
     }

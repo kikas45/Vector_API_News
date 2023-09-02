@@ -138,19 +138,20 @@ class DetailCommentFragment :  BottomSheetDialogFragment(R.layout.fragment_detai
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loaddata() {
         binding.apply {
             val  userName = passCommentsToDetailFragment.getString("userName", "")
             val  userImage = passCommentsToDetailFragment.getString("userImage", "")
             val  desc = passCommentsToDetailFragment.getString("detail_comment", "")
 
-            textProfileName.text = userName.toString()
-            textDetailsComments.text = desc.toString()
+            textProfileName.text = ""+ userName
+            textDetailsComments.text = ""+ desc
 
 
             requireContext().let {
                 Glide.with(it)
-                    .load(userImage.toString())
+                    .load(""+ userImage)
                     .centerCrop()
                     .error(R.drawable.ic_launcher_background)
                     .transition(DrawableTransitionOptions.withCrossFade())

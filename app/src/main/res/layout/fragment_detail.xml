@@ -16,7 +16,7 @@
 
 
         <ImageView
-            android:id="@+id/image_view_bookmark2"
+            android:id="@+id/image_view_selected"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginTop="3dp"
@@ -25,10 +25,25 @@
             android:focusable="true"
             android:foreground="?android:selectableItemBackgroundBorderless"
             android:padding="6dp"
-            android:src="@drawable/ic_bookmark_unselected"
+            android:src="@drawable/ic_bookmark_selected"
             app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+        <ImageView
+            android:id="@+id/image_view_unselcted"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:visibility="invisible"
+            android:src="@drawable/ic_bookmark_unselected"
+            app:layout_constraintStart_toStartOf="@+id/image_view_selected"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_selected"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_selected"
+            app:layout_constraintTop_toTopOf="@+id/image_view_selected" />
 
         <ImageView
             android:id="@+id/btnBackPressed"
@@ -60,7 +75,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/btnBackPressed"
-            app:layout_constraintEnd_toStartOf="@+id/image_view_bookmark2"
+            app:layout_constraintEnd_toStartOf="@+id/image_view_selected"
             app:layout_constraintStart_toEndOf="@+id/btnBackPressed"
             app:layout_constraintTop_toTopOf="@+id/btnBackPressed" />
 

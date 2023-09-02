@@ -214,7 +214,7 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
 
     override fun onItemLongClicked(photo: User) {
 
-        val name = photo.firstName.toString()
+        val name = ""+ photo.firstName
         val user = User(name)
 
         deleteUser(user)
@@ -229,10 +229,10 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
         builder.setPositiveButton("Yes") { _, _ ->
             mUserViewModel.deleteUser(photo)
 
-            showToast("Successfully removed: ${photo.firstName.toString()}")
+            showToast("Successfully removed: ${photo.firstName}")
         }
         builder.setNegativeButton("No") { _, _ -> }
-        builder.setTitle("Delete ${photo.firstName.toString()}?")
+        builder.setTitle("Delete ${photo.firstName}?")
         builder.setMessage("Are you sure you want to delete ${photo.firstName.toString()}?")
         builder.create().show()
     }
@@ -255,7 +255,7 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
 
 
     override fun onItemClicked(_user: User) {
-        val name = _user.firstName.toString()
+        val name =  ""+ _user.firstName
         val bundle = Bundle().apply { putString("search", name) }
         findNavController().navigate(R.id.action_main_Save_Fragment_to_searchFragment, bundle)
         hideKeyBaord()

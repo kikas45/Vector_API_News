@@ -1,6 +1,7 @@
 package com.example.vectonews.ui.sub_main
 
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -63,6 +64,13 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
     }
 
+    private val sharedPrefPassDataToDetailsFragment: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            Constants.PASS_DATA_TO_DETAIL_FRAGMENT,
+            Context.MODE_PRIVATE
+        )
+
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -176,16 +184,19 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
     //for details Fragments
     override fun onclickDetailsItem(photo: UnsplashPhoto) {
 
-        val getUrl = photo.url.toString()
-        val titles = photo.title.toString()
+        val getUrl = "" + photo.url
+        val titles = "" + photo.title
+        val urlToImage = "" + photo.urlToImage
+        val name = "" + photo.source.name
+        val publishedAt = "" + photo.publishedAt
+        val artcileId = "" + photo.publishedAt
 
-        val artcileId = photo.publishedAt.toString()
         saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+
+        sharedPrefPassDataToDetailsFragment(titles, getUrl, urlToImage, name, publishedAt )
 
         val intent = Intent("Main_Home_Fragment")
         intent.putExtra("Navigation", "Navigate_To_Detail_Fragment")
-        intent.putExtra("titles", titles)
-        intent.putExtra("getUrl", getUrl)
         requireContext().sendBroadcast(intent)
 
 
@@ -220,7 +231,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
     }
 
     override fun onItemBsSaved(photo: UnsplashPhoto) {
-        val artcileId = photo.publishedAt.toString()
+        val artcileId = "" + photo.publishedAt
         saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
         val customPopupFragment = CommentFragment()
         customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
@@ -240,6 +251,20 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
         editor = sharedHandleSearchNavigation.edit()
         editor.putString("handleSearchNavigation", handleSearchNavigation)
         editor.apply()
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    fun sharedPrefPassDataToDetailsFragment(titles:String, getUrl:String, urlToImage:String, name:String, date:String){
+        val editor = sharedPrefPassDataToDetailsFragment.edit()
+        editor.putString("titles", titles)
+        editor.putString("getUrl", getUrl)
+        editor.putString("urlToImage", urlToImage)
+        editor.putString("name", name)
+        editor.putString("date", date)
+        editor.apply()
+
+
+
     }
 
 

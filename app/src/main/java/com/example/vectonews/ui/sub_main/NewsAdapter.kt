@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.vectonews.R
 import com.example.vectonews.api.UnsplashPhoto
-import com.example.vectonews.databinding.ItemUnsplashPhotoBinding
+import com.example.vectonews.databinding.ItemNewsadapterLayoutBinding
 import com.example.vectonews.offlinecenter.SavedViewModel
 
 
@@ -26,7 +26,7 @@ class NewsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val binding =
-            ItemUnsplashPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemNewsadapterLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return PhotoViewHolder(binding)
     }
@@ -42,7 +42,7 @@ class NewsAdapter(
             }
 
             savedViewModel.allNotes.observe(lifecycleOwner) { notes ->
-                val isSaved = notes.any { note -> note.title == currentItem.title }
+                val isSaved = notes.any { note -> note.title  == currentItem.title }
                 currentItem.isSaved = isSaved
                 holder.updateBookmarkIcon(isSaved)
             }
@@ -65,7 +65,7 @@ class NewsAdapter(
     }
 
 
-    inner class PhotoViewHolder(private val binding: ItemUnsplashPhotoBinding) :
+    inner class PhotoViewHolder(private val binding: ItemNewsadapterLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -125,22 +125,19 @@ class NewsAdapter(
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView)
 
-
-                textViewTitle.text = photo.title.toString()
-                val surce = photo.source.name
-                val date = photo.publishedAt
+                textMyTitles.text =  "" + photo.title
+                val surce = ""  + photo.source.name
+                val date = "" + photo.publishedAt
                 textSourceName.text = surce + " :: " + date
-                // updateBookmarkIcon(photo.isSaved)
+                updateBookmarkIcon(photo.isSaved)
             }
         }
 
 
         fun updateBookmarkIcon(isSaved: Boolean) {
             if (isSaved) {
-                // Display the saved bookmark icon
                 binding.imageViewBookmark.setImageResource(R.drawable.ic_bookmark_selected)
             } else {
-                // Display the unsaved bookmark icon
                 binding.imageViewBookmark.setImageResource(R.drawable.ic_bookmark_unselected)
             }
         }
@@ -152,7 +149,7 @@ class NewsAdapter(
     companion object {
         private val PHOTO_COMPARATOR = object : DiffUtil.ItemCallback<UnsplashPhoto>() {
             override fun areItemsTheSame(oldItem: UnsplashPhoto, newItem: UnsplashPhoto) =
-                oldItem.title.toString() == newItem.title.toString()
+                oldItem.title + "" == newItem.title + ""
 
             override fun areContentsTheSame(oldItem: UnsplashPhoto, newItem: UnsplashPhoto) =
                 oldItem == newItem

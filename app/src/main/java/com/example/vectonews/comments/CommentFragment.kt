@@ -30,7 +30,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.signIn.GoogleSignInViewModel
 import com.example.vectonews.R
+import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.databinding.FragmentCommentBinding
+import com.example.vectonews.settings.AppSettings
 import com.example.vectonews.signIn.CommentSignInGoogleFragment
 import com.example.vectonews.signIn.CustomPopupFragment
 import com.example.vectonews.util.Constants
@@ -41,10 +43,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -54,13 +54,6 @@ import java.util.Locale
 class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
     AdapterComment.OnItemClickListener, AdapterComment.OnItemDeleteListener {
 
-
-    private var _binding: FragmentCommentBinding? = null
-    private val binding get() = _binding!!
-
-
-    private val commentKey = "commentKey"
-    private val commentsArticles = "AllCommentsArticles"
 
     private val sharedDass: SharedPreferences by lazy {
         requireContext().applicationContext.getSharedPreferences(
@@ -93,12 +86,19 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
         )
     }
 
+    private val settings: AppSettings by lazy {
+        AppSettings(requireContext())
+    }
+
+
     private val commentViewModel by viewModels<CommentViewModel>()
 
 
+    private var _binding: FragmentCommentBinding? = null
+    private val binding get() = _binding!!
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _binding = FragmentCommentBinding.bind(view)
 
         val filter = IntentFilter("CommentFragmentGoogleSign")
@@ -240,32 +240,65 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                 val desc_edit_text = editText2Simple.text.toString().trim { it <= ' ' }
                 val userId = sharedDass.getString("userId", "")!!
 
-                if (desc_edit_text.isNotEmpty() && userId.isNotEmpty()) {
+                val connectivityManager =
+                    requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val networkInfo = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null && networkInfo.isConnected) {
+
+                    if (desc_edit_text.isNotEmpty() && userId.isNotEmpty()) {
+
+                        try {
+                            checkTotalCommentOnPerNewsArticle(desc_edit_text)
+                            hideKeyBaord(editText2Simple)
+                            addContentCons.setVisibility(View.INVISIBLE)
+                            progressUplaoding.visibility = View.VISIBLE
+                            imgSendCleare.visibility = View.INVISIBLE
+                            imgSendSimple.visibility = View.INVISIBLE
+                            textViewError.visibility = View.INVISIBLE
+
+                            handler.postDelayed(Runnable {
+                                fectData()
+
+                            }, 400)
+
+                        } catch (_: Exception) {
+                        }
+                    } else {
+
+                        try {
+                            hideKeyBaord(editText2Simple)
+                            progressUplaoding.visibility = View.INVISIBLE
+                            addContentCons.visibility = View.INVISIBLE
+                            textViewError.visibility = View.INVISIBLE
+                            imgSendCleare.visibility = View.INVISIBLE
+                            imgSendSimple.visibility = View.INVISIBLE
+
+                            showToast("Something went wrong")
+
+                        } catch (_: Exception) {
+                        }
+                    }
+
+
+                } else {
+
 
                     try {
-                        checkTotalCommentOnPerNewsArticle(desc_edit_text)
                         hideKeyBaord(editText2Simple)
-                        binding.addContentCons.setVisibility(View.INVISIBLE)
                         binding.progressUplaoding.visibility = View.VISIBLE
                         imgSendCleare.visibility = View.INVISIBLE
                         imgSendSimple.visibility = View.INVISIBLE
-                    } catch (_: Exception) {
-                    }
-                } else {
 
-                    try {
-                        hideKeyBaord(editText2Simple)
-                        binding.progressUplaoding.visibility = View.INVISIBLE
-                        imgSendCleare.visibility = View.VISIBLE
-                        imgSendSimple.visibility = View.VISIBLE
-
-                        showToast("Something went wrong")
+                        showToast("Check internet connectivity")
 
                     } catch (_: Exception) {
                     }
+
                 }
-            }
 
+
+            }
 
             imgSendCleare.setOnClickListener { v: View? ->
                 hideKeyBaord(editText2Simple)
@@ -326,7 +359,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
 
         val newsArticleId = sharedDass.getString("newsArticleId", "")!!
 
-        commentViewModel.checkTotalComments(newsArticleId){ isUnderLimit ->
+        commentViewModel.checkTotalComments(newsArticleId) { isUnderLimit ->
             if (isUnderLimit) {
                 checkIfCommentKeyExistOrNot() // go check if comment key already exist
                 saveNewsArticleComment(desc_edit_text)
@@ -354,7 +387,6 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
 
 
     }
-
 
 
     // Now save the comment key
@@ -439,7 +471,6 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                 recyclerViewSql.layoutManager = layoutManager
                 recyclerViewSql.adapter = adapter
 
-
                 commentViewModel.newsFeedLiveData.observe(viewLifecycleOwner, Observer { it ->
                     if (it.isNullOrEmpty()) {
 
@@ -447,6 +478,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                             progressBarDownlaods.visibility = View.INVISIBLE
                             addContentCons.visibility = View.VISIBLE
                             addContentCons.text = "Be the first to comment"
+                            textViewError.visibility = View.INVISIBLE
                         } catch (_: Exception) {
                         }
 
@@ -455,6 +487,8 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                             adapter.setData(it)
                             progressBarDownlaods.visibility = View.INVISIBLE
                             addContentCons.visibility = View.INVISIBLE
+                            textViewError.visibility = View.INVISIBLE
+
                         } catch (_: Exception) {
                         }
                     }
@@ -466,6 +500,19 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                     addContentCons.visibility = View.VISIBLE
                     addContentCons.text = "You are currently Offline"
                     progressBarDownlaods.visibility = View.INVISIBLE
+                    textViewError.visibility = View.VISIBLE
+                    textViewError.setOnClickListener {
+
+                        progressBarDownlaods.visibility = View.VISIBLE
+                        addContentCons.visibility = View.INVISIBLE
+                        textViewError.visibility = View.INVISIBLE
+
+                        handler.postDelayed(Runnable {
+                            fectData()
+
+                        }, 400)
+
+                    }
                 } catch (_: Exception) {
                 }
             }
@@ -476,25 +523,55 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
 
 
     override fun onItemClicked(photo: ModelComment) {
+
+        /// opening the detail comment fragment
         val detailCommentFragment = DetailCommentFragment()
         detailCommentFragment.show(childFragmentManager, detailCommentFragment.tag)
         passCommentsToDetailFragment(
             photo.name.toString(),
             photo.userImage.toString(),
-            photo.desc.toString()
+            photo.desc.toString(),
+            photo.userId.toString(),
+            photo.articleId.toString(),
+            photo.commentKey.toString(),
         )
 
     }
 
+
     override fun onItemDeleteListner(photo: ModelComment) {
-        deleteAllUsers(photo)
+
+        //  open delete bs comment
+        val bscommentFragment = BSCommentFragment()
+        bscommentFragment.show(childFragmentManager, bscommentFragment.tag)
+        passCommentsToDetailFragment(
+            ""+ photo.name,
+            ""+ photo.userImage,
+            ""+ photo.desc,
+            ""+ photo.userId,
+            ""+ photo.articleId,
+            ""+ photo.commentKey,
+        )
+
     }
 
 
     private val TrialSignInGoogle = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             try {
-                signinWithGoogle()
+                val typeOfBottomSheet = intent.getStringExtra("typeOfBottomSheet")
+
+                if (typeOfBottomSheet.equals("DeleteComment_By_BSc_Order")) {
+                    deletUsercomment()
+                } else if (typeOfBottomSheet.equals("OpenComment_By_BSc_Order")) {
+                    /// opening the detail comment fragment
+                    val detailCommentFragment = DetailCommentFragment()
+                    detailCommentFragment.show(childFragmentManager, detailCommentFragment.tag)
+                } else if (typeOfBottomSheet.equals("showSnackbar_Flaged_Report")) {
+                    showSnackbar_Flaged_Report("Thanks for letting us know about it")
+                } else {
+                    signinWithGoogle()
+                }
             } catch (_: Exception) {
             }
         }
@@ -514,6 +591,36 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
     }
 
 
+    private fun funDeleteComments(newsArticleId: String, itemNewsKey: String) {
+
+        commentViewModel.deleteComment(newsArticleId, itemNewsKey) { isSuccess ->
+            if (isSuccess) {
+
+            }
+        }
+
+    }
+
+
+    private fun passCommentsToDetailFragment(
+        userName: String,
+        userImage: String,
+        detail_comment: String,
+        userId: String,
+        newsArticleId: String,
+        commentKey: String,
+    ) {
+        val editor = passCommentsToDetailFragment.edit()
+        editor.putString("userName", userName)
+        editor.putString("userImage", userImage)
+        editor.putString("detail_comment", detail_comment)
+        editor.putString("userId", userId)
+        editor.putString("newsArticleId", newsArticleId)
+        editor.putString("commentKey", commentKey)
+        editor.apply()
+    }
+
+
     override fun onDestroy() {
         super.onDestroy()
         try {
@@ -526,50 +633,60 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
     }
 
 
-    private fun deleteAllUsers(photo: ModelComment) {
+    private fun showSnackbar_Flaged_Report(text: String) {
 
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") { _, _ ->
-            val currentUserid = sharedDass.getString("userId", "")
+        try {
+            if (settings.getTheme() == AppSettings.THEME_LIGHT) {
 
-            val userId = photo.userId.toString()
-            val newsArticleId = photo.articleId.toString()
-            val itemNewsKey = photo.commentKey.toString()
+                val snackbar = Snackbar.make(binding.bottomSheetLayout, text, 3000)
 
-            if (userId == currentUserid) {
-                funDeleteComments(newsArticleId, itemNewsKey)
+                snackbar.setTextColor(requireContext().resources.getColor(R.color.black))
+                snackbar.setBackgroundTint(requireContext().resources.getColor(R.color.white))
+                snackbar.setActionTextColor(requireContext().resources.getColor(R.color.black))
+                snackbar.setAction(
+                    "UNDO"
+                ) { view ->
+
+                    Toast.makeText(requireContext(), "Okay", Toast.LENGTH_SHORT).show()
+
+                }
+                snackbar.show()
+
             } else {
-                Toast.makeText(requireContext(), "not allowed", Toast.LENGTH_SHORT).show()
+                val snackbar = Snackbar.make(binding.bottomSheetLayout, text, 3000)
+                snackbar.setTextColor(requireContext().resources.getColor(R.color.white))
+                snackbar.setBackgroundTint(requireContext().resources.getColor(R.color.black))
+                snackbar.setActionTextColor(requireContext().resources.getColor(R.color.white))
+                snackbar.setAction(
+                    "UNDO"
+                ) { view ->
+                    Toast.makeText(requireContext(), "Okay", Toast.LENGTH_SHORT).show()
+
+                }
+                snackbar.show()
+
             }
+
+        } catch (_: Exception) {
         }
-        builder.setNegativeButton("No") { _, _ -> }
-        builder.setTitle("Delete Comment?")
-        builder.create().show()
+
     }
 
 
-    private fun funDeleteComments(newsArticleId: String, itemNewsKey: String) {
+    private fun deletUsercomment() {
 
-        commentViewModel.deleteComment(newsArticleId, itemNewsKey) { isSuccess ->
-            if (isSuccess) {
-                showToast("Successfully removed everything")
-            } else {
-                showToast("Unable to delete comment")
+        try {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton("Yes") { _, _ ->
+                val itemNewsKey = passCommentsToDetailFragment.getString("commentKey", "")
+                val newsArticleId = passCommentsToDetailFragment.getString("newsArticleId", "")
+                funDeleteComments(""+ newsArticleId, ""+itemNewsKey)
             }
+            builder.setNegativeButton("No") { _, _ -> }
+            builder.setTitle("Delete Comment?")
+            builder.create().show()
+        } catch (_: Exception) {
         }
-
-    }
-
-    private fun passCommentsToDetailFragment(
-        userName: String,
-        userImage: String,
-        detail_comment: String,
-    ) {
-        val editor = passCommentsToDetailFragment.edit()
-        editor.putString("userName", userName)
-        editor.putString("userImage", userImage)
-        editor.putString("detail_comment", detail_comment)
-        editor.apply()
     }
 
 

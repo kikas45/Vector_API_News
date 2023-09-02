@@ -48,15 +48,24 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
 
-
     private val sharedDass: SharedPreferences by lazy {
         requireContext().applicationContext.getSharedPreferences(
-            Constants. USER_PROFILE,
+            Constants.USER_PROFILE,
             Context.MODE_PRIVATE
         )
     }
 
     private val savedViewModel by viewModels<SavedViewModel>()
+
+
+    private val sharedPrefPassDataToDetailsFragment: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            Constants.PASS_DATA_TO_DETAIL_FRAGMENT,
+            Context.MODE_PRIVATE
+        )
+
+    }
+
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +76,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         changeToolabrColor()
         getCommentCounts()
         CheckIsBookMarked()
+        operation_Delete_and_save()
 
 
         binding.apply {
@@ -74,9 +84,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             btnBackPressed.setOnClickListener {
 
                 val WhatFragment = sharedDass.getString("WhatFragment", "")
-                if (WhatFragment.equals("My_Main_Home_Fragment")){
+                if (WhatFragment.equals("My_Main_Home_Fragment")) {
                     findNavController().popBackStack(R.id.main_Home_Fragment, false)
-                }else{
+                } else {
                     findNavController().popBackStack(R.id.searchFragment, false)
                 }
             }
@@ -93,18 +103,14 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
 
 
-            val titles = arguments?.getString("titles").toString()
+            val titles = sharedPrefPassDataToDetailsFragment.getString("titles", "")
 
 
-            if (titles.isNotEmpty()) {
+            if (titles.toString().isNotEmpty()) {
                 textView3.text = titles
             }
 
-            imageViewBookmark2.setOnClickListener {
-                val source = Source("", "")
-                val photo = UnsplashPhoto(titles, "", "", source, "", false)
-                deleteAllUsers(photo)
-            }
+
 
 
             webView.webViewClient = WebViewClient()
@@ -122,9 +128,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             if (savedInstanceState != null) {
                 webView.restoreState(savedInstanceState)
             } else {
-                val urls_image = arguments?.getString("urls_webView").toString()
+                val getUrl = sharedPrefPassDataToDetailsFragment.getString("getUrl", "")
 
-                webView.loadUrl(urls_image)
+
+                webView.loadUrl("" + getUrl)
             }
 
             swipeMotionLayout.setOnRefreshListener {
@@ -169,9 +176,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
                     if (webView.canGoBack()) {
                         webView.goBack()
-                    } else if (WhatFragment.equals("My_Main_Home_Fragment")){
+                    } else if (WhatFragment.equals("My_Main_Home_Fragment")) {
                         findNavController().popBackStack(R.id.main_Home_Fragment, false)
-                    }else{
+                    } else {
                         findNavController().popBackStack(R.id.searchFragment, false)
                     }
                 }
@@ -193,7 +200,8 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 activity?.window?.statusBarColor = Color.parseColor("#2E2E2E")
 
             }
-        }catch (_:Exception){}
+        } catch (_: Exception) {
+        }
 
 
     }
@@ -243,46 +251,115 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             _binding = null
 
             handler.removeCallbacksAndMessages { null }
-        }catch (_:Exception){}
+        } catch (_: Exception) {
+        }
     }
 
 
     fun CheckIsBookMarked() {
-        val titles = arguments?.getString("titles").toString()
 
+        val titles = sharedPrefPassDataToDetailsFragment.getString("titles", "")
         savedViewModel.allNotes.observe(viewLifecycleOwner, Observer {
-              val isSaved = it.any { note -> note.title == titles.toString() }
-              updateBookmarkIcon(isSaved)
+            val isSaved = it.any { note -> note.title == "" + titles }
+            updateBookmarkIcon(isSaved)
         })
 
     }
 
     fun updateBookmarkIcon(isSaved: Boolean) {
         if (isSaved) {
-            // Display the saved bookmark icon
-            binding.imageViewBookmark2.setImageResource(R.drawable.ic_bookmark_selected)
+
+            try {
+                binding.imageViewSelected.visibility = View.VISIBLE
+                binding.imageViewUnselcted.visibility = View.INVISIBLE
+
+            } catch (_: Exception) {
+            }
         } else {
-            // Display the unsaved bookmark icon
-            binding.imageViewBookmark2.setImageResource(R.drawable.ic_bookmark_unselected)
+            try {
+
+                binding.imageViewSelected.visibility = View.INVISIBLE
+                binding.imageViewUnselcted.visibility = View.VISIBLE
+
+            } catch (_: Exception) {
+            }
+
         }
     }
 
 
-    private fun deleteAllUsers(photo: UnsplashPhoto) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") { _, _ ->
-            savedViewModel.delete(photo)
-            Toast.makeText(
-                requireContext(),
-                "Successfully removed everything",
-                Toast.LENGTH_SHORT
-            ).show()
+    fun operation_Delete_and_save() {
+
+        binding.apply {
+
+            binding.imageViewSelected.setOnClickListener {
+
+                try {
+                    val titles = sharedPrefPassDataToDetailsFragment.getString("titles", "")
+                    val getUrl = sharedPrefPassDataToDetailsFragment.getString("getUrl", "")
+                    val urlToImage = sharedPrefPassDataToDetailsFragment.getString("urlToImage", "")
+                    val date = sharedPrefPassDataToDetailsFragment.getString("date", "")
+                    val name = sharedPrefPassDataToDetailsFragment.getString("name", "")
+
+                    val _userName = Source("", "" + name)
+                    val artciles =
+                        UnsplashPhoto("" + titles, "" + getUrl , "" + urlToImage, _userName,"" + date)
+                    artciles.isSaved = false
+                    deleteAllUsers(artciles)
+
+                    binding.imageViewSelected.visibility = View.INVISIBLE
+                    binding.imageViewUnselcted.visibility = View.VISIBLE
+                } catch (_: Exception) {
+                }
+            }
+
+
+
+            binding.imageViewUnselcted.setOnClickListener {
+                try {
+                    binding.imageViewSelected.visibility = View.VISIBLE
+                    binding.imageViewUnselcted.visibility = View.INVISIBLE
+
+                    val title = sharedPrefPassDataToDetailsFragment.getString("titles", "")
+                    val getUrl = sharedPrefPassDataToDetailsFragment.getString("getUrl", "")
+                    val urlToImage = sharedPrefPassDataToDetailsFragment.getString("urlToImage", "")
+                    val date = sharedPrefPassDataToDetailsFragment.getString("date", "")
+                    val name = sharedPrefPassDataToDetailsFragment.getString("name", "")
+
+                    val _userName = Source("", "" +name)
+                    val artciles =
+                        UnsplashPhoto("" + title, "" + getUrl , "" + urlToImage, _userName,"" + date)
+
+                    artciles.isSaved = true
+                    savedViewModel.insert(artciles)
+                } catch (_: Exception) {
+                }
+
+            }
+
+
         }
-        builder.setNegativeButton("No") { _, _ -> }
-        builder.setTitle("Delete News Article?")
-        builder.create().show()
     }
 
+
+    private fun deleteAllUsers(artciles: UnsplashPhoto) {
+
+        try {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton("Yes") { _, _ ->
+                savedViewModel.delete(artciles)
+                Toast.makeText(
+                    requireContext(),
+                    "Article deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            builder.setNegativeButton("No") { _, _ -> }
+            builder.setTitle("Delete News Article?")
+            builder.create().show()
+        } catch (_: Exception) {
+        }
+    }
 
 
 }
