@@ -40,10 +40,6 @@ import java.util.Locale
 @AndroidEntryPoint
 class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
-    private val commentKey = "commentKey"
-    private val commentsArticles = "AllCommentsArticles"
-
-
     private lateinit var navController: NavController
 
     private val settings: AppSettings by lazy {
@@ -203,7 +199,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
     private fun autoDeleteOldComments() {
         val database = FirebaseDatabase.getInstance()
-        val dataRef = database.reference.child(commentKey)
+        val dataRef = database.reference.child(Constants.commentKey)
 
 
       //  val thirtySecondsAgo = System.currentTimeMillis() - 30000
@@ -247,7 +243,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
     private fun deleteMyNewsArticles(articleId: String) {
         val database = FirebaseDatabase.getInstance()
-        val dataRef = database.reference.child(commentsArticles)
+        val dataRef = database.reference.child(Constants.commentsArticles)
         dataRef.child(articleId).removeValue().addOnCompleteListener {
             if (it.isSuccessful) {
                // showToast("Deleted Successfully")

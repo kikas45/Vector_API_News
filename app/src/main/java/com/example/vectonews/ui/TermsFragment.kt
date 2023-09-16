@@ -31,6 +31,15 @@ class TermsFragment : Fragment(R.layout.fragment_terms) {
         )
     }
 
+    // working for the shared preference of notification
+    private val shared_time_count: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            Constants.SHARED_TIME,
+            Context.MODE_PRIVATE
+        )
+    }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,11 +52,19 @@ class TermsFragment : Fragment(R.layout.fragment_terms) {
                 if (checkBox.isChecked){
                     val doNotShowAgain = checkBox.isChecked
                     sharedDass.edit().putBoolean("The_box_Checked", doNotShowAgain).apply()
+
+                    // enable notification right away
+                    val editor = shared_time_count.edit()
+                    editor.putString(Constants.isActive, "Button_Active")
+                    editor.apply()
+
                     findNavController().navigate(R.id.action_termsFragment_to_main_Home_Fragment2)
+
                 }
             }
 
         }
+
 
         changeToolbarColor()
 

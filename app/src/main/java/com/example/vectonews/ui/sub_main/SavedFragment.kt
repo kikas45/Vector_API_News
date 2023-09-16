@@ -85,7 +85,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
             try {
 
                 hamburger.setOnClickListener {
-                    val intent = Intent("MainActivity")
+                    val intent = Intent(Constants.MainActivity)
                     requireContext().sendBroadcast(intent)
                 }
 
@@ -112,11 +112,11 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
 
                 textsearch.setOnClickListener {
-                    val intent = Intent("Main_Home_Fragment")
-                    intent.putExtra("Navigation", "Navigate_to_SearchHistoryFragment")
+                    val intent = Intent(Constants.Main_Home_Fragment)
+                    intent.putExtra("Navigation", Constants.Navigate_to_SearchHistoryFragment)
                     requireContext().sendBroadcast(intent)
 
-                    handleSearchNavigation("Major_Home_Fragment")
+                    handleSearchNavigation(Constants.Major_Home_Fragment)
 
                 }
 
@@ -195,8 +195,8 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
         sharedPrefPassDataToDetailsFragment(titles, getUrl, urlToImage, name, publishedAt )
 
-        val intent = Intent("Main_Home_Fragment")
-        intent.putExtra("Navigation", "Navigate_To_Detail_Fragment")
+        val intent = Intent(Constants.Main_Home_Fragment)
+        intent.putExtra("Navigation", Constants.Navigate_To_Detail_Fragment)
         requireContext().sendBroadcast(intent)
 
 
@@ -232,7 +232,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved),
 
     override fun onItemBsSaved(photo: UnsplashPhoto) {
         val artcileId = "" + photo.publishedAt
-        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+        saveUserProfilesAndNewsArticleId(artcileId, Constants.My_Main_Home_Fragment)
         val customPopupFragment = CommentFragment()
         customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
 

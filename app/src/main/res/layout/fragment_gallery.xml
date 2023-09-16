@@ -93,7 +93,7 @@
 
                 <TextView
                     android:id="@+id/textsearch"
-                    style="@style/Base.Theme.VectoNews"
+                    style="@style/Base.Theme.VectorNews"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:clickable="false"
@@ -167,7 +167,7 @@
         android:text="Results could not be loaded"
         android:textAlignment="center"
         android:textSize="18sp"
-        style="@style/Base.Theme.VectoNews"
+        style="@style/Base.Theme.VectorNews"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -184,7 +184,7 @@
         android:justificationMode="inter_word"
         android:textAlignment="center"
         android:textSize="18sp"
-        style="@style/Base.Theme.VectoNews"
+        style="@style/Base.Theme.VectorNews"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

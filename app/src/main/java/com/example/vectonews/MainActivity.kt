@@ -1,6 +1,7 @@
 package com.example.vectonews
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.os.Looper
 import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.vectonews.notification.NotificationService
 import com.example.vectonews.settings.AppSettings
 import com.example.vectonews.updates.AppUpdateViewModel
 import com.example.vectonews.util.Constants
@@ -61,14 +64,21 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private val shared_time_count: SharedPreferences by lazy {
+        applicationContext.getSharedPreferences(
+            Constants.SHARED_TIME,
+            Context.MODE_PRIVATE
+        )
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-           val splashScreen = installSplashScreen()
+        val splashScreen = installSplashScreen()
         //   Thread.sleep(2000)  /// remember to remove this after production
         applyTheme(settings.getTheme())
         setContentView(R.layout.activity_main)
-        setTheme(R.style.Base_Theme_VectoNews)
+        setTheme(R.style.Base_Theme_VectorNews)
         supportActionBar?.hide()
 
 
@@ -121,50 +131,50 @@ class MainActivity : AppCompatActivity() {
 
 
         textAll.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_Category", "")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         textSport.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_Category", "sport")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "sport")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         textTechnology.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_Category", "technology")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "technology")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         textScience.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
+            val intent = Intent(Constants.Gallery_Fragment)
             intent.putExtra("New_Category", "science")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         textBussiness.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_Category", "business")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "business")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         textEntertainment.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_Category", "entertainment")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "entertainment")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
 
         textHealth.setOnClickListener {
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_Category", "health")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "health")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -174,8 +184,8 @@ class MainActivity : AppCompatActivity() {
 
         textHeadLinesSouthAfrica.setOnClickListener {
             saveSelectedCountry("sa")
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_country", "sa")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "sa")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -184,16 +194,16 @@ class MainActivity : AppCompatActivity() {
         textHeadLinesCanada.setOnClickListener {
             saveSelectedCountry("ca")
 
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_country", "ca")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "ca")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         textHeadLinesUs.setOnClickListener {
             saveSelectedCountry("us")
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_country", "us")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "us")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -204,8 +214,8 @@ class MainActivity : AppCompatActivity() {
 
             saveSelectedCountry("ng")
 
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_country", "ng")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "ng")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -214,8 +224,8 @@ class MainActivity : AppCompatActivity() {
 
             saveSelectedCountry("gb")
 
-            val intent = Intent("Gallery_Fragment")
-            intent.putExtra("New_country", "gb")
+            val intent = Intent(Constants.Gallery_Fragment)
+            intent.putExtra(Constants.New_country, "gb")
             applicationContext.sendBroadcast(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -254,14 +264,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val intentFilter = IntentFilter("MainActivity")
-        registerReceiver(receiver, intentFilter)
+        try {
+            val intentFilter = IntentFilter(Constants.MainActivity)
+            registerReceiver(receiver, intentFilter)
 
+            val editor = shared_time_count.edit()
+            editor.putString("STATE_APP", "RUNNING")
+            editor.apply()
+
+        } catch (_: Exception) {
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(receiver)
+        try {
+            unregisterReceiver(receiver)
+        } catch (_: Exception) {
+        }
     }
 
     private fun applyTheme(theme: Int) {
@@ -276,7 +296,9 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         try {
             handler.removeCallbacksAndMessages(null)
-
+            val editor = shared_time_count.edit()
+            editor.putString("STATE_APP", "BACKGROUND")
+            editor.apply()
         } catch (_: Exception) {
         }
 
@@ -307,20 +329,20 @@ class MainActivity : AppCompatActivity() {
             val calendar = Calendar.getInstance()
             val currentDate = calendar.time
             val doNotShowAgain = shared_do_no_show.getBoolean(Constants.DO_NO_SHOW_AGAIN, false)
-            var app_date: Date? = null
+            var app_date: Date?
 
 
             appUpdateViewModel.appUpdateLiveData.observe(this, Observer { response ->
                 response?.let {
 
                     val my_app_date = response.date_publish
-                    app_date = dateFormat.parse(my_app_date)
+                    app_date = dateFormat.parse(my_app_date + "")
 
                     if (response.version == null && !doNotShowAgain) {
-                        showPopup(""+response.date_publish, ""+response.url)
+                        showPopup("" + response.date_publish, "" + response.url)
                     } else if (currentDate.compareTo(app_date) > 0) {
 
-                        final_showPopup(""+ response.date_publish, ""+response.url)
+                        final_showPopup("" + response.date_publish, "" + response.url)
 
                     }
 
@@ -347,7 +369,7 @@ class MainActivity : AppCompatActivity() {
             builder.setView(popupView)
             builder.setPositiveButton(
                 "Proceed"
-            ) { dialogInterface, i ->
+            ) { dialogInterface, _ ->
                 startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
@@ -357,7 +379,7 @@ class MainActivity : AppCompatActivity() {
             }
             builder.setNegativeButton(
                 "Dismiss"
-            ) { dialogInterface, i ->
+            ) { _, i ->
                 val doNotShowAgain = doNotShowAgainCheckBox.isChecked
                 shared_do_no_show.edit().putBoolean(Constants.DO_NO_SHOW_AGAIN, doNotShowAgain)
                     .apply()
@@ -407,6 +429,15 @@ class MainActivity : AppCompatActivity() {
             dialog.window!!.attributes = layoutParams
         } catch (ignored: java.lang.Exception) {
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try {
+            val editor = shared_time_count.edit()
+            editor.putString("STATE_APP", "BACKGROUND")
+            editor.apply()
+        } catch (_: Exception) { }
     }
 
 
