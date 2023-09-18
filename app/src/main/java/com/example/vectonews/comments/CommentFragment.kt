@@ -57,16 +57,14 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
 
     private val sharedDass: SharedPreferences by lazy {
         requireContext().applicationContext.getSharedPreferences(
-            Constants.USER_PROFILE,
-            Context.MODE_PRIVATE
+            Constants.USER_PROFILE, Context.MODE_PRIVATE
         )
     }
 
 
     private val passCommentsToDetailFragment: SharedPreferences by lazy {
         requireContext().applicationContext.getSharedPreferences(
-            Constants.passCommentsToDetailFragment,
-            Context.MODE_PRIVATE
+            Constants.passCommentsToDetailFragment, Context.MODE_PRIVATE
         )
     }
 
@@ -106,9 +104,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+            .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
 
         googlesignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
@@ -129,11 +125,8 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
 
         val userImage = sharedDass.getString("userImage", "")!!
 
-        Glide.with(requireContext())
-            .load(userImage)
-            .centerCrop()
-            .error(R.drawable.ic_launcher_background)
-            .into(binding.profileImage)
+        Glide.with(requireContext()).load(userImage).centerCrop()
+            .error(R.drawable.ic_launcher_background).into(binding.profileImage)
 
 
 
@@ -145,8 +138,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             binding.bottomSheetLayout.startAnimation(
                 AnimationUtils.loadAnimation(
-                    requireContext(),
-                    R.anim.slide_in_from_right
+                    requireContext(), R.anim.slide_in_from_right
                 )
             )
 
@@ -436,10 +428,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                         commentData["commentKey"] = pushKey
                         // Now you can update the comment's commentKey field
                         commentViewModel.updateCommentField(
-                            newsArticleId,
-                            pushKey,
-                            "commentKey",
-                            pushKey
+                            newsArticleId, pushKey, "commentKey", pushKey
                         )
                     }
 
@@ -498,7 +487,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
             } else {
                 try {
                     addContentCons.visibility = View.VISIBLE
-                    addContentCons.text = "You are currently Offline"
+                    addContentCons.text = "You are currently offline"
                     progressBarDownlaods.visibility = View.INVISIBLE
                     textViewError.visibility = View.VISIBLE
                     textViewError.setOnClickListener {
@@ -528,12 +517,12 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
         val detailCommentFragment = DetailCommentFragment()
         detailCommentFragment.show(childFragmentManager, detailCommentFragment.tag)
         passCommentsToDetailFragment(
-            photo.name.toString(),
-            photo.userImage.toString(),
-            photo.desc.toString(),
-            photo.userId.toString(),
-            photo.articleId.toString(),
-            photo.commentKey.toString(),
+            "" + photo.name.toString(),
+            "" + photo.userImage.toString(),
+            "" + photo.desc.toString(),
+            "" + photo.userId.toString(),
+            "" + photo.articleId.toString(),
+            "" + photo.commentKey.toString(),
         )
 
     }
@@ -545,12 +534,12 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
         val bscommentFragment = BSCommentFragment()
         bscommentFragment.show(childFragmentManager, bscommentFragment.tag)
         passCommentsToDetailFragment(
-            ""+ photo.name,
-            ""+ photo.userImage,
-            ""+ photo.desc,
-            ""+ photo.userId,
-            ""+ photo.articleId,
-            ""+ photo.commentKey,
+            "" + photo.name,
+            "" + photo.userImage,
+            "" + photo.desc,
+            "" + photo.userId,
+            "" + photo.articleId,
+            "" + photo.commentKey,
         )
 
     }
@@ -559,15 +548,15 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
     private val TrialSignInGoogle = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             try {
-                val typeOfBottomSheet = intent.getStringExtra("typeOfBottomSheet")
+                val typeOfBottomSheet = intent.getStringExtra(Constants.typeOfBottomSheet)
 
-                if (typeOfBottomSheet.equals("DeleteComment_By_BSc_Order")) {
+                if (typeOfBottomSheet.equals(Constants.DeleteComment_By_BSc_Order)) {
                     deletUsercomment()
-                } else if (typeOfBottomSheet.equals("OpenComment_By_BSc_Order")) {
+                } else if (typeOfBottomSheet.equals(Constants.OpenComment_By_BSc_Order)) {
                     /// opening the detail comment fragment
                     val detailCommentFragment = DetailCommentFragment()
                     detailCommentFragment.show(childFragmentManager, detailCommentFragment.tag)
-                } else if (typeOfBottomSheet.equals("showSnackbar_Flaged_Report")) {
+                } else if (typeOfBottomSheet.equals(Constants.showSnackbar_Flaged_Report)) {
                     showSnackbar_Flaged_Report("Thanks for letting us know about it")
                 } else {
                     signinWithGoogle()
@@ -647,7 +636,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                     "UNDO"
                 ) { view ->
 
-                    Toast.makeText(requireContext(), "Okay", Toast.LENGTH_SHORT).show()
+                    showToast("Okay")
 
                 }
                 snackbar.show()
@@ -660,8 +649,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
                 snackbar.setAction(
                     "UNDO"
                 ) { view ->
-                    Toast.makeText(requireContext(), "Okay", Toast.LENGTH_SHORT).show()
-
+                    showToast("Okay")
                 }
                 snackbar.show()
 
@@ -680,7 +668,7 @@ class CommentFragment : BottomSheetDialogFragment(R.layout.fragment_comment),
             builder.setPositiveButton("Yes") { _, _ ->
                 val itemNewsKey = passCommentsToDetailFragment.getString("commentKey", "")
                 val newsArticleId = passCommentsToDetailFragment.getString("newsArticleId", "")
-                funDeleteComments(""+ newsArticleId, ""+itemNewsKey)
+                funDeleteComments("" + newsArticleId, "" + itemNewsKey)
             }
             builder.setNegativeButton("No") { _, _ -> }
             builder.setTitle("Delete Comment?")

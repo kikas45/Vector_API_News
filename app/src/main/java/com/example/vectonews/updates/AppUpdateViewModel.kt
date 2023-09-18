@@ -13,7 +13,7 @@ import javax.inject.Inject
 class AppUpdateViewModel @Inject constructor(
     private val repository: AppUpdateRepository ): ViewModel() {
     companion object {
-        private const val MY_APP_VERSION = "1"
+        private const val MY_APP_VERSION = "2"
     }
 
 
@@ -23,10 +23,10 @@ class AppUpdateViewModel @Inject constructor(
     fun checkAppUpdate() {
         repository.getAppUpdate(
             onSuccess = { appUpdate ->
-                val version = appUpdate?.version.toString()
+                val Firebase_Version = appUpdate?.version.toString()
                 val myFiredate = appUpdate?.date_publish.toString()
 
-                if (version != MY_APP_VERSION) {
+                if (Firebase_Version != MY_APP_VERSION) {
                     val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
                     val currentDate = Calendar.getInstance().time
                     val fireDate = dateFormat.parse(myFiredate)

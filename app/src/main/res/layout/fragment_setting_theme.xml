@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/textView42"
-            style="@style/Base.Theme.VectoNews"
+            style="@style/Base.Theme.VectorNews"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -77,7 +77,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                style="@style/Base.Theme.VectoNews"
+                style="@style/Base.Theme.VectorNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -106,7 +106,7 @@
 
             <TextView
                 android:id="@+id/textView"
-                style="@style/Base.Theme.VectoNews"
+                style="@style/Base.Theme.VectorNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -114,11 +114,12 @@
                 android:layout_marginEnd="24dp"
                 android:elegantTextHeight="true"
                 android:maxLines="1"
-                android:text="Enable message notification"
+                android:text="Enable Notification"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/switch2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView74" />
+                app:layout_constraintTop_toBottomOf="@+id/textView74"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/textView64"
@@ -130,7 +131,7 @@
                 android:alpha="0"
                 android:elegantTextHeight="true"
                 android:maxLines="1"
-                android:text="Be updated with latest information"
+                android:text="Get Latest Headline News"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/switch2"
                 app:layout_constraintStart_toStartOf="parent"
@@ -146,7 +147,7 @@
                 android:alpha="0"
                 android:elegantTextHeight="true"
                 android:maxLines="1"
-                android:text="Note: app will recreated when changing team "
+                android:text="Dark theme help get rid of glare"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/rg_theme"
                 app:layout_constraintStart_toStartOf="parent"

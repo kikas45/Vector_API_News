@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.VectoNews" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.Theme.VectorNews" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <item name="colorPrimary">#FFFFFF</item>
         <item name="colorPrimaryVariant">#039BE5</item>
@@ -92,7 +92,7 @@
 
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
 
-        <item name="postSplashScreenTheme">@style/Base.Theme.VectoNews</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.VectorNews</item>
 
         <!--  <item name="windowSplashScreenAnimationDuration">200</item>-->
 

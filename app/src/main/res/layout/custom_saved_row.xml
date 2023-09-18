@@ -35,7 +35,7 @@
 
             <TextView
                 android:id="@+id/text_view_title"
-                style="@style/Base.Theme.VectoNews"
+                style="@style/Base.Theme.VectorNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/textSourceName"
-                style="@style/Base.Theme.VectoNews"
+                style="@style/Base.Theme.VectorNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="-6dp"

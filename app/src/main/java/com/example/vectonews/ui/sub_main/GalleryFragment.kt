@@ -1,6 +1,7 @@
 package com.example.vectonews.ui.sub_main
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,7 +12,9 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,6 +27,7 @@ import com.example.vectonews.api.Source
 import com.example.vectonews.api.UnsplashPhoto
 import com.example.vectonews.comments.CommentFragment
 import com.example.vectonews.databinding.FragmentGalleryBinding
+import com.example.vectonews.notification.NotificationService
 import com.example.vectonews.offlinecenter.SavedViewModel
 import com.example.vectonews.settings.AppSettings
 import com.example.vectonews.signIn.CustomPopupFragment
@@ -81,7 +85,12 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
     }
 
-
+    private val shared_time_count: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            Constants.SHARED_TIME,
+            Context.MODE_PRIVATE
+        )
+    }
 
     private val sharedPrefPassDataToDetailsFragment: SharedPreferences by lazy {
         requireContext().getSharedPreferences(
@@ -99,19 +108,42 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     }
 
 
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentGalleryBinding.bind(view)
 
-        val filter = IntentFilter("Gallery_Fragment")
+
+
+        val filter = IntentFilter(Constants.Gallery_Fragment)
         requireContext().registerReceiver(broadcastReceiver, filter)
+
+
+        handler.postDelayed(Runnable {
+
+            val getSharedNotify = shared_time_count.getString("isActive", "")
+
+            if (getSharedNotify.equals("Button_Active")) {
+
+                if (!foregroundServiceRunning()) {
+                    requireContext().startService(Intent(requireContext(), NotificationService::class.java))
+                }
+
+            }else{
+                requireContext().stopService(Intent(requireContext(), NotificationService::class.java))
+            }
+
+        }, 2000)
+
 
 
 
         binding.apply {
             hamburger.setOnClickListener {
-                val intent = Intent("MainActivity")
+                val intent = Intent(Constants.MainActivity)
                 requireContext().sendBroadcast(intent)
             }
 
@@ -138,10 +170,10 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
             textsearch.setOnClickListener {
                 val intent = Intent(Constants.Main_Home_Fragment)
-                intent.putExtra("Navigation", "Navigate_to_SearchHistoryFragment")
+                intent.putExtra("Navigation", Constants.Navigate_to_SearchHistoryFragment)
                 requireContext().sendBroadcast(intent)
 
-                handleSearchNavigation("Major_Home_Fragment")
+                handleSearchNavigation(Constants.Major_Home_Fragment)
 
             }
 
@@ -260,10 +292,10 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         val publishedAt ="" +  photo.publishedAt
 
         val artcileId ="" +  photo.publishedAt
-        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+        saveUserProfilesAndNewsArticleId(artcileId, Constants.My_Main_Home_Fragment)
 
         val intent = Intent(Constants.Main_Home_Fragment)
-        intent.putExtra("Navigation", "Navigate_To_Detail_Fragment")
+        intent.putExtra("Navigation", Constants.Navigate_To_Detail_Fragment)
         requireContext().sendBroadcast(intent)
 
         sharedPrefPassDataToDetailsFragment(titles, getUrl, urlToImage, name, publishedAt )
@@ -321,12 +353,14 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
         if (urlData != "SavedData") {
             getSelectedCountry().let {
                 viewModel.updateCountry(it)
+
             }
         }
 
 
         viewModel.photos.observe(viewLifecycleOwner) {
             adapter.submitData(viewLifecycleOwner.lifecycle, it)
+
         }
 
 
@@ -335,7 +369,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     private val broadcastReceiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == "Gallery_Fragment") {
+            if (intent.action == Constants.Gallery_Fragment) {
                 val newCountry = intent.getStringExtra("New_country")
                 newCountry?.let {
                     binding.progressBar.isVisible = true
@@ -423,7 +457,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
     override fun onBsItem(photo: UnsplashPhoto) {
 
         val artcileId = "" + photo.publishedAt
-        saveUserProfilesAndNewsArticleId(artcileId, "My_Main_Home_Fragment")
+        saveUserProfilesAndNewsArticleId(artcileId, Constants.My_Main_Home_Fragment)
         val customPopupFragment = CommentFragment()
         customPopupFragment.show(childFragmentManager, customPopupFragment.tag)
 
@@ -525,6 +559,15 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), NewsAdapter.OnItemC
 
 
 
+    }
+    fun foregroundServiceRunning(): Boolean {
+        val activityManager = requireContext().getSystemService(AppCompatActivity.ACTIVITY_SERVICE) as ActivityManager
+        for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
+            if (NotificationService::class.java.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 
 

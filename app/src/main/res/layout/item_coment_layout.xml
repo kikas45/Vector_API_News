@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/textdescription"
-        style="@style/Base.Theme.VectoNews"
+        style="@style/Base.Theme.VectorNews"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"

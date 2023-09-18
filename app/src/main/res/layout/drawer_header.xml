@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/textView6"
-        style="@style/Base.Theme.VectoNews"
+        style="@style/Base.Theme.VectorNews"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -36,7 +36,7 @@
 
     <TextView
         android:id="@+id/textView4"
-        style="@style/Base.Theme.VectoNews"
+        style="@style/Base.Theme.VectorNews"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -121,7 +121,7 @@
 
     <TextView
         android:id="@+id/textView5"
-        style="@style/Base.Theme.VectoNews"
+        style="@style/Base.Theme.VectorNews"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
