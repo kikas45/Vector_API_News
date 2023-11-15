@@ -105,16 +105,15 @@ class MainActivity : AppCompatActivity() {
 
         app_update_statues()
 
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
+
 
         drawerLayout = findViewById(R.id.drawer_layout)
 
         val drawerLayoutRef = WeakReference(drawerLayout)
         receiver = MyBroadcastReceiver(drawerLayoutRef)
-
-
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        navController = navHostFragment.navController
 
 
         val navigationView: NavigationView = findViewById(R.id.navigation_view)

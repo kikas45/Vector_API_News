@@ -90,7 +90,7 @@
     <style name="MyAppThemes" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/black_shade_1</item>
 
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_round_logo</item>
 
         <item name="postSplashScreenTheme">@style/Base.Theme.VectorNews</item>
 

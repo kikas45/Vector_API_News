@@ -16,7 +16,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.vectonews.MainActivity
@@ -176,7 +175,7 @@ class NotificationService : Service() {
         }
 
         val builder = NotificationCompat.Builder(applicationContext, "ChannelId")
-            .setSmallIcon(android.R.drawable.stat_notify_chat)
+            .setSmallIcon(R.drawable.ic_round_logo)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setContentText(NewsTitle + "")
@@ -216,7 +215,7 @@ class NotificationService : Service() {
 
         val builder = NotificationCompat.Builder(applicationContext, ChannelId)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSmallIcon(android.R.drawable.stat_notify_chat)
+            .setSmallIcon(R.drawable.ic_round_logo)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 

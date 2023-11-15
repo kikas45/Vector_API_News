@@ -224,16 +224,16 @@ class Main_Search_History_Fragment : Fragment(R.layout.fragment_search_history),
     }
 
 
-    private fun deleteUser(photo: User) {
+    private fun deleteUser(user: User) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-            mUserViewModel.deleteUser(photo)
+            mUserViewModel.deleteUser(user)
 
-            showToast("Successfully removed: ${photo.firstName}")
+            showToast("Successfully removed: ${user.firstName}")
         }
         builder.setNegativeButton("No") { _, _ -> }
-        builder.setTitle("Delete ${photo.firstName}?")
-        builder.setMessage("Are you sure you want to delete ${photo.firstName.toString()}?")
+        builder.setTitle("Delete")
+        builder.setMessage("Are you sure you want to delete ${user.firstName.toString()}?")
         builder.create().show()
     }
 

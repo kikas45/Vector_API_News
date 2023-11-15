@@ -204,7 +204,7 @@ class Main_Home_Fragment : Fragment(R.layout.fragment_main_home) {
 
       //  val thirtySecondsAgo = System.currentTimeMillis() - 30000
 
-          val twoDaysAgo = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000
+          val twoDaysAgo = System.currentTimeMillis() - 1 * 24 * 60 * 60 * 1000
 
         //  val thirtyMinutesAgo = System.currentTimeMillis() - 30 * 60 * 1000
 
